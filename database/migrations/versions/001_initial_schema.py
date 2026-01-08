@@ -26,21 +26,21 @@ def upgrade() -> None:
         'ROMAN_EMPIRE', 'MEDIEVAL', 'REFORMATION', 'COLONIAL', 'MODERN', 'CONTEMPORARY',
         name='chronologyera'
     )
-    chronology_era_enum.create(op.get_bind())
+    chronology_era_enum.create(op.get_bind(), checkfirst=True)
 
     # Create event_type enum
     event_type_enum = sa.Enum(
         'POLITICAL', 'ECONOMIC', 'RELIGIOUS', 'MILITARY', 'SOCIAL', 'NATURAL', 'PROPHETIC',
         name='eventtype'
     )
-    event_type_enum.create(op.get_bind())
+    event_type_enum.create(op.get_bind(), checkfirst=True)
 
     # Create fulfillment_type enum
     fulfillment_type_enum = sa.Enum(
         'COMPLETE', 'PARTIAL', 'REPEATED', 'CONDITIONAL', 'PENDING', 'SYMBOLIC',
         name='fulfillmenttype'
     )
-    fulfillment_type_enum.create(op.get_bind())
+    fulfillment_type_enum.create(op.get_bind(), checkfirst=True)
 
     # Create chronology_events table
     op.create_table(
@@ -58,7 +58,7 @@ def upgrade() -> None:
         sa.Column('event_type', event_type_enum, nullable=False),
         sa.Column('biblical_source', sa.String(length=255), nullable=True),
         sa.Column('historical_source', sa.Text(), nullable=True),
-        sa.Column('metadata', JSON, nullable=True),
+        sa.Column('extra_data', JSON, nullable=True),
         sa.PrimaryKeyConstraint('id')
     )
     op.create_index('ix_chronology_events_id', 'chronology_events', ['id'])
@@ -186,7 +186,7 @@ def upgrade() -> None:
         sa.Column('description', sa.Text(), nullable=True),
         sa.Column('data_source', sa.String(length=255), nullable=True),
         sa.Column('timestamp', sa.DateTime(), nullable=True),
-        sa.Column('metadata', JSON, nullable=True),
+        sa.Column('extra_data', JSON, nullable=True),
         sa.PrimaryKeyConstraint('id')
     )
     op.create_index('ix_world_indicators_id', 'world_indicators', ['id'])

@@ -23,7 +23,7 @@ BIBLICAL_EVENTS = [
         "era": "CREATION_TO_FLOOD",
         "event_type": "RELIGIOUS",
         "biblical_source": "Genesis 1-2",
-        "metadata": {"significance": "absolute_beginning", "ussher_confidence": "high"},
+        "extra_data": {"significance": "absolute_beginning", "ussher_confidence": "high"},
     },
     {
         "name": "Fall of Man",
@@ -34,7 +34,7 @@ BIBLICAL_EVENTS = [
         "era": "CREATION_TO_FLOOD",
         "event_type": "RELIGIOUS",
         "biblical_source": "Genesis 3",
-        "metadata": {"consequence": "death_enters_world", "pattern": "disobedience_judgment"},
+        "extra_data": {"consequence": "death_enters_world", "pattern": "disobedience_judgment"},
     },
     {
         "name": "Murder of Abel",
@@ -45,7 +45,7 @@ BIBLICAL_EVENTS = [
         "era": "CREATION_TO_FLOOD",
         "event_type": "SOCIAL",
         "biblical_source": "Genesis 4:8",
-        "metadata": {"pattern": "violence_escalation"},
+        "extra_data": {"pattern": "violence_escalation"},
     },
     {
         "name": "The Flood",
@@ -55,7 +55,7 @@ BIBLICAL_EVENTS = [
         "era": "CREATION_TO_FLOOD",
         "event_type": "NATURAL",
         "biblical_source": "Genesis 6-9",
-        "metadata": {
+        "extra_data": {
             "pattern": "moral_decay_judgment",
             "survivors": 8,
             "restart_event": True,
@@ -72,7 +72,7 @@ BIBLICAL_EVENTS = [
         "era": "FLOOD_TO_ABRAHAM",
         "event_type": "SOCIAL",
         "biblical_source": "Genesis 11:1-9",
-        "metadata": {"pattern": "pride_humbling", "linguistic_divergence": True},
+        "extra_data": {"pattern": "pride_humbling", "linguistic_divergence": True},
     },
     # PATRIARCHS
     {
@@ -82,7 +82,7 @@ BIBLICAL_EVENTS = [
         "era": "PATRIARCHS",
         "event_type": "RELIGIOUS",
         "biblical_source": "Genesis 12:1-3",
-        "metadata": {
+        "extra_data": {
             "covenant": "Abrahamic",
             "promises": ["land", "descendants", "blessing_to_nations"],
             "foundational": True,
@@ -95,7 +95,7 @@ BIBLICAL_EVENTS = [
         "era": "PATRIARCHS",
         "event_type": "NATURAL",
         "biblical_source": "Genesis 19",
-        "metadata": {"pattern": "moral_decay_judgment", "intercession_theme": True},
+        "extra_data": {"pattern": "moral_decay_judgment", "intercession_theme": True},
     },
     {
         "name": "Sacrifice of Isaac (Akedah)",
@@ -104,7 +104,7 @@ BIBLICAL_EVENTS = [
         "era": "PATRIARCHS",
         "event_type": "RELIGIOUS",
         "biblical_source": "Genesis 22",
-        "metadata": {"typology": "substitutionary_sacrifice", "prophetic_significance": True},
+        "extra_data": {"typology": "substitutionary_sacrifice", "prophetic_significance": True},
     },
     {
         "name": "Jacob's Ladder Vision",
@@ -115,7 +115,7 @@ BIBLICAL_EVENTS = [
         "era": "PATRIARCHS",
         "event_type": "PROPHETIC",
         "biblical_source": "Genesis 28:10-22",
-        "metadata": {"covenant_continuity": True},
+        "extra_data": {"covenant_continuity": True},
     },
     {
         "name": "Joseph Sold into Egypt",
@@ -124,7 +124,7 @@ BIBLICAL_EVENTS = [
         "era": "PATRIARCHS",
         "event_type": "SOCIAL",
         "biblical_source": "Genesis 37",
-        "metadata": {"pattern": "suffering_exaltation", "providence_theme": True},
+        "extra_data": {"pattern": "suffering_exaltation", "providence_theme": True},
     },
     {
         "name": "Joseph Becomes Vizier of Egypt",
@@ -133,7 +133,7 @@ BIBLICAL_EVENTS = [
         "era": "PATRIARCHS",
         "event_type": "POLITICAL",
         "biblical_source": "Genesis 41:37-45",
-        "metadata": {"pattern": "exile_to_rulership", "prophetic_dreams": True},
+        "extra_data": {"pattern": "exile_to_rulership", "prophetic_dreams": True},
     },
     {
         "name": "Jacob's Family Migrates to Egypt",
@@ -142,7 +142,7 @@ BIBLICAL_EVENTS = [
         "era": "PATRIARCHS",
         "event_type": "SOCIAL",
         "biblical_source": "Genesis 46-47",
-        "metadata": {"population": 70, "begins_egyptian_period": True},
+        "extra_data": {"population": 70, "begins_egyptian_period": True},
     },
     # EGYPTIAN BONDAGE
     {
@@ -154,7 +154,7 @@ BIBLICAL_EVENTS = [
         "era": "EGYPTIAN_BONDAGE",
         "event_type": "POLITICAL",
         "biblical_source": "Exodus 1:8-14",
-        "metadata": {"pattern": "host_nation_turns_oppressive", "duration_years": 215},
+        "extra_data": {"pattern": "host_nation_turns_oppressive", "duration_years": 215},
     },
     {
         "name": "Birth of Moses",
@@ -163,7 +163,7 @@ BIBLICAL_EVENTS = [
         "era": "EGYPTIAN_BONDAGE",
         "event_type": "RELIGIOUS",
         "biblical_source": "Exodus 2:1-10",
-        "metadata": {"deliverer_archetype": True, "hidden_in_plain_sight": True},
+        "extra_data": {"deliverer_archetype": True, "hidden_in_plain_sight": True},
     },
     {
         "name": "Moses Flees to Midian",
@@ -172,7 +172,7 @@ BIBLICAL_EVENTS = [
         "era": "EGYPTIAN_BONDAGE",
         "event_type": "SOCIAL",
         "biblical_source": "Exodus 2:11-15",
-        "metadata": {"pattern": "exile_preparation"},
+        "extra_data": {"pattern": "exile_preparation"},
     },
     {
         "name": "Burning Bush Encounter",
@@ -181,7 +181,7 @@ BIBLICAL_EVENTS = [
         "era": "EGYPTIAN_BONDAGE",
         "event_type": "PROPHETIC",
         "biblical_source": "Exodus 3-4",
-        "metadata": {"divine_name_revealed": "YHWH", "mission_assignment": True},
+        "extra_data": {"divine_name_revealed": "YHWH", "mission_assignment": True},
     },
     # EXODUS TO JUDGES
     {
@@ -191,7 +191,7 @@ BIBLICAL_EVENTS = [
         "era": "EXODUS_TO_JUDGES",
         "event_type": "POLITICAL",
         "biblical_source": "Exodus 12-14",
-        "metadata": {
+        "extra_data": {
             "pattern": "deliverance_from_bondage",
             "participants": 600000,
             "passover_instituted": True,
@@ -205,7 +205,7 @@ BIBLICAL_EVENTS = [
         "era": "EXODUS_TO_JUDGES",
         "event_type": "MILITARY",
         "biblical_source": "Exodus 14:21-31",
-        "metadata": {"pattern": "divine_military_intervention", "complete_victory": True},
+        "extra_data": {"pattern": "divine_military_intervention", "complete_victory": True},
     },
     {
         "name": "Giving of the Law at Sinai",
@@ -215,7 +215,7 @@ BIBLICAL_EVENTS = [
         "era": "EXODUS_TO_JUDGES",
         "event_type": "RELIGIOUS",
         "biblical_source": "Exodus 19-24",
-        "metadata": {
+        "extra_data": {
             "covenant": "Mosaic",
             "theocracy_established": True,
             "legal_foundation": True,
@@ -228,7 +228,7 @@ BIBLICAL_EVENTS = [
         "era": "EXODUS_TO_JUDGES",
         "event_type": "RELIGIOUS",
         "biblical_source": "Exodus 32",
-        "metadata": {"pattern": "immediate_apostasy", "intercession": "Moses"},
+        "extra_data": {"pattern": "immediate_apostasy", "intercession": "Moses"},
     },
     {
         "name": "Wilderness Wandering Begins",
@@ -238,7 +238,7 @@ BIBLICAL_EVENTS = [
         "era": "EXODUS_TO_JUDGES",
         "event_type": "SOCIAL",
         "biblical_source": "Numbers 14",
-        "metadata": {"pattern": "unbelief_consequence", "generational_judgment": True},
+        "extra_data": {"pattern": "unbelief_consequence", "generational_judgment": True},
     },
     {
         "name": "Conquest of Canaan Begins",
@@ -248,7 +248,7 @@ BIBLICAL_EVENTS = [
         "era": "EXODUS_TO_JUDGES",
         "event_type": "MILITARY",
         "biblical_source": "Joshua 1-12",
-        "metadata": {"pattern": "promised_land_conquest", "divine_warfare": True},
+        "extra_data": {"pattern": "promised_land_conquest", "divine_warfare": True},
     },
     {
         "name": "Death of Joshua",
@@ -257,7 +257,7 @@ BIBLICAL_EVENTS = [
         "era": "EXODUS_TO_JUDGES",
         "event_type": "POLITICAL",
         "biblical_source": "Joshua 24:29",
-        "metadata": {"transition_to_judges": True},
+        "extra_data": {"transition_to_judges": True},
     },
     # UNITED MONARCHY
     {
@@ -267,7 +267,7 @@ BIBLICAL_EVENTS = [
         "era": "UNITED_MONARCHY",
         "event_type": "POLITICAL",
         "biblical_source": "1 Samuel 10",
-        "metadata": {"monarchy_begins": True, "pattern": "demanded_king"},
+        "extra_data": {"monarchy_begins": True, "pattern": "demanded_king"},
     },
     {
         "name": "David Anointed by Samuel",
@@ -276,7 +276,7 @@ BIBLICAL_EVENTS = [
         "era": "UNITED_MONARCHY",
         "event_type": "PROPHETIC",
         "biblical_source": "1 Samuel 16:1-13",
-        "metadata": {"davidic_line_begins": True, "messianic_significance": True},
+        "extra_data": {"davidic_line_begins": True, "messianic_significance": True},
     },
     {
         "name": "David Defeats Goliath",
@@ -287,7 +287,7 @@ BIBLICAL_EVENTS = [
         "era": "UNITED_MONARCHY",
         "event_type": "MILITARY",
         "biblical_source": "1 Samuel 17",
-        "metadata": {"pattern": "weak_defeats_strong", "faith_victory": True},
+        "extra_data": {"pattern": "weak_defeats_strong", "faith_victory": True},
     },
     {
         "name": "Death of Saul",
@@ -296,7 +296,7 @@ BIBLICAL_EVENTS = [
         "era": "UNITED_MONARCHY",
         "event_type": "MILITARY",
         "biblical_source": "1 Samuel 31",
-        "metadata": {"pattern": "disobedience_downfall"},
+        "extra_data": {"pattern": "disobedience_downfall"},
     },
     {
         "name": "David Becomes King",
@@ -305,7 +305,7 @@ BIBLICAL_EVENTS = [
         "era": "UNITED_MONARCHY",
         "event_type": "POLITICAL",
         "biblical_source": "2 Samuel 2:4, 5:3",
-        "metadata": {"golden_age_begins": True},
+        "extra_data": {"golden_age_begins": True},
     },
     {
         "name": "Capture of Jerusalem",
@@ -314,7 +314,7 @@ BIBLICAL_EVENTS = [
         "era": "UNITED_MONARCHY",
         "event_type": "MILITARY",
         "biblical_source": "2 Samuel 5:6-10",
-        "metadata": {"jerusalem_becomes_capital": True, "city_of_david": True},
+        "extra_data": {"jerusalem_becomes_capital": True, "city_of_david": True},
     },
     {
         "name": "Davidic Covenant",
@@ -323,7 +323,7 @@ BIBLICAL_EVENTS = [
         "era": "UNITED_MONARCHY",
         "event_type": "PROPHETIC",
         "biblical_source": "2 Samuel 7:12-16",
-        "metadata": {
+        "extra_data": {
             "covenant": "Davidic",
             "messianic_foundation": True,
             "eternal_throne_promise": True,
@@ -336,7 +336,7 @@ BIBLICAL_EVENTS = [
         "era": "UNITED_MONARCHY",
         "event_type": "SOCIAL",
         "biblical_source": "2 Samuel 11-12",
-        "metadata": {"pattern": "power_corruption", "consequences": "family_strife"},
+        "extra_data": {"pattern": "power_corruption", "consequences": "family_strife"},
     },
     {
         "name": "Solomon Becomes King",
@@ -345,7 +345,7 @@ BIBLICAL_EVENTS = [
         "era": "UNITED_MONARCHY",
         "event_type": "POLITICAL",
         "biblical_source": "1 Kings 1-2",
-        "metadata": {"wisdom_era_begins": True},
+        "extra_data": {"wisdom_era_begins": True},
     },
     {
         "name": "Dedication of Solomon's Temple",
@@ -354,7 +354,7 @@ BIBLICAL_EVENTS = [
         "era": "UNITED_MONARCHY",
         "event_type": "RELIGIOUS",
         "biblical_source": "1 Kings 8",
-        "metadata": {
+        "extra_data": {
             "temple_era_begins": True,
             "centralized_worship": True,
             "glory_cloud_descends": True,
@@ -369,7 +369,7 @@ BIBLICAL_EVENTS = [
         "era": "UNITED_MONARCHY",
         "event_type": "RELIGIOUS",
         "biblical_source": "1 Kings 11:1-13",
-        "metadata": {"pattern": "prosperity_apostasy", "kingdom_division_foretold": True},
+        "extra_data": {"pattern": "prosperity_apostasy", "kingdom_division_foretold": True},
     },
     # DIVIDED KINGDOM
     {
@@ -379,7 +379,7 @@ BIBLICAL_EVENTS = [
         "era": "DIVIDED_KINGDOM",
         "event_type": "POLITICAL",
         "biblical_source": "1 Kings 12",
-        "metadata": {
+        "extra_data": {
             "pattern": "unity_to_fragmentation",
             "northern_tribes": 10,
             "southern_tribes": 2,
@@ -392,7 +392,7 @@ BIBLICAL_EVENTS = [
         "era": "DIVIDED_KINGDOM",
         "event_type": "RELIGIOUS",
         "biblical_source": "1 Kings 12:25-33",
-        "metadata": {"pattern": "political_religious_corruption", "northern_apostasy": True},
+        "extra_data": {"pattern": "political_religious_corruption", "northern_apostasy": True},
     },
     {
         "name": "Elijah and Prophets of Baal",
@@ -401,7 +401,7 @@ BIBLICAL_EVENTS = [
         "era": "DIVIDED_KINGDOM",
         "event_type": "RELIGIOUS",
         "biblical_source": "1 Kings 18",
-        "metadata": {
+        "extra_data": {
             "pattern": "prophetic_confrontation",
             "monotheism_vindicated": True,
             "ahab_jezebel_era": True,
@@ -414,7 +414,7 @@ BIBLICAL_EVENTS = [
         "era": "DIVIDED_KINGDOM",
         "event_type": "MILITARY",
         "biblical_source": "2 Kings 17",
-        "metadata": {
+        "extra_data": {
             "pattern": "persistent_apostasy_exile",
             "assyrian_captivity": True,
             "northern_tribes_lost": True,
@@ -428,7 +428,7 @@ BIBLICAL_EVENTS = [
         "era": "DIVIDED_KINGDOM",
         "event_type": "RELIGIOUS",
         "biblical_source": "2 Kings 18:1-8",
-        "metadata": {"pattern": "reform_revival", "faithful_king": True},
+        "extra_data": {"pattern": "reform_revival", "faithful_king": True},
     },
     {
         "name": "Sennacherib's Invasion Thwarted",
@@ -437,7 +437,7 @@ BIBLICAL_EVENTS = [
         "era": "DIVIDED_KINGDOM",
         "event_type": "MILITARY",
         "biblical_source": "2 Kings 19:35",
-        "metadata": {
+        "extra_data": {
             "pattern": "divine_deliverance",
             "miraculous_intervention": True,
             "isaiah_prophecy": True,
@@ -450,7 +450,7 @@ BIBLICAL_EVENTS = [
         "era": "DIVIDED_KINGDOM",
         "event_type": "RELIGIOUS",
         "biblical_source": "2 Kings 22-23",
-        "metadata": {"pattern": "reform_revival", "law_rediscovered": True, "passover_renewed": True},
+        "extra_data": {"pattern": "reform_revival", "law_rediscovered": True, "passover_renewed": True},
     },
     # EXILE
     {
@@ -460,7 +460,7 @@ BIBLICAL_EVENTS = [
         "era": "EXILE",
         "event_type": "MILITARY",
         "biblical_source": "Daniel 1:1-6",
-        "metadata": {"first_wave_exile": True, "daniel_ministry_begins": True},
+        "extra_data": {"first_wave_exile": True, "daniel_ministry_begins": True},
     },
     {
         "name": "Daniel's Dream Interpretation",
@@ -469,7 +469,7 @@ BIBLICAL_EVENTS = [
         "era": "EXILE",
         "event_type": "PROPHETIC",
         "biblical_source": "Daniel 2",
-        "metadata": {
+        "extra_data": {
             "empire_succession_revealed": True,
             "kingdoms": ["Babylon", "Medo-Persia", "Greece", "Rome"],
             "prophetic_framework": True,
@@ -482,7 +482,7 @@ BIBLICAL_EVENTS = [
         "era": "EXILE",
         "event_type": "MILITARY",
         "biblical_source": "2 Kings 24:10-17",
-        "metadata": {"second_wave_exile": True, "ezekiel_ministry_begins": True},
+        "extra_data": {"second_wave_exile": True, "ezekiel_ministry_begins": True},
     },
     {
         "name": "Fall of Jerusalem",
@@ -491,7 +491,7 @@ BIBLICAL_EVENTS = [
         "era": "EXILE",
         "event_type": "MILITARY",
         "biblical_source": "2 Kings 25",
-        "metadata": {
+        "extra_data": {
             "pattern": "covenant_unfaithfulness_exile",
             "temple_destroyed": True,
             "judah_exiled": True,
@@ -507,7 +507,7 @@ BIBLICAL_EVENTS = [
         "era": "EXILE",
         "event_type": "PROPHETIC",
         "biblical_source": "Ezekiel 37",
-        "metadata": {"national_resurrection_theme": True, "hope_in_exile": True},
+        "extra_data": {"national_resurrection_theme": True, "hope_in_exile": True},
     },
     {
         "name": "Fall of Babylon",
@@ -516,7 +516,7 @@ BIBLICAL_EVENTS = [
         "era": "EXILE",
         "event_type": "MILITARY",
         "biblical_source": "Daniel 5",
-        "metadata": {
+        "extra_data": {
             "empire_transition": "Babylon to Persia",
             "daniel_prophecy_fulfilled": True,
             "pattern": "pride_downfall",
@@ -530,7 +530,7 @@ BIBLICAL_EVENTS = [
         "era": "POST_EXILE",
         "event_type": "POLITICAL",
         "biblical_source": "Ezra 1:1-4",
-        "metadata": {
+        "extra_data": {
             "pattern": "exile_restoration",
             "prophesied_by": "Isaiah",
             "return_begins": True,
@@ -543,7 +543,7 @@ BIBLICAL_EVENTS = [
         "era": "POST_EXILE",
         "event_type": "RELIGIOUS",
         "biblical_source": "Ezra 3",
-        "metadata": {"rebuilding_begins": True, "mixed_emotions": True},
+        "extra_data": {"rebuilding_begins": True, "mixed_emotions": True},
     },
     {
         "name": "Completion of Second Temple",
@@ -552,7 +552,7 @@ BIBLICAL_EVENTS = [
         "era": "POST_EXILE",
         "event_type": "RELIGIOUS",
         "biblical_source": "Ezra 6:15",
-        "metadata": {"temple_era_restored": True, "haggai_zechariah_ministry": True},
+        "extra_data": {"temple_era_restored": True, "haggai_zechariah_ministry": True},
     },
     {
         "name": "Esther Becomes Queen",
@@ -561,7 +561,7 @@ BIBLICAL_EVENTS = [
         "era": "POST_EXILE",
         "event_type": "POLITICAL",
         "biblical_source": "Esther 2:17",
-        "metadata": {"providence_theme": True, "deliverance_foreshadowed": True},
+        "extra_data": {"providence_theme": True, "deliverance_foreshadowed": True},
     },
     {
         "name": "Haman's Plot Thwarted",
@@ -570,7 +570,7 @@ BIBLICAL_EVENTS = [
         "era": "POST_EXILE",
         "event_type": "POLITICAL",
         "biblical_source": "Esther 7-9",
-        "metadata": {"pattern": "antisemitic_plot_reversed", "purim_festival": True},
+        "extra_data": {"pattern": "antisemitic_plot_reversed", "purim_festival": True},
     },
     {
         "name": "Ezra Returns to Jerusalem",
@@ -579,7 +579,7 @@ BIBLICAL_EVENTS = [
         "era": "POST_EXILE",
         "event_type": "RELIGIOUS",
         "biblical_source": "Ezra 7-10",
-        "metadata": {"spiritual_renewal": True, "law_emphasis": True},
+        "extra_data": {"spiritual_renewal": True, "law_emphasis": True},
     },
     {
         "name": "Nehemiah Rebuilds Walls",
@@ -588,7 +588,7 @@ BIBLICAL_EVENTS = [
         "era": "POST_EXILE",
         "event_type": "POLITICAL",
         "biblical_source": "Nehemiah 6:15",
-        "metadata": {"physical_restoration": True, "opposition_overcome": True},
+        "extra_data": {"physical_restoration": True, "opposition_overcome": True},
     },
     {
         "name": "Alexander the Great Conquers Persia",
@@ -597,7 +597,7 @@ BIBLICAL_EVENTS = [
         "era": "INTERTESTAMENTAL",
         "event_type": "MILITARY",
         "historical_source": "Arrian, Anabasis Alexandri",
-        "metadata": {
+        "extra_data": {
             "empire_transition": "Persia to Greece",
             "daniel_prophecy_fulfilled": True,
             "hellenization_begins": True,
@@ -611,7 +611,7 @@ BIBLICAL_EVENTS = [
         "era": "INTERTESTAMENTAL",
         "event_type": "MILITARY",
         "historical_source": "1 Maccabees",
-        "metadata": {"pattern": "religious_freedom_struggle", "hanukkah_origin": True},
+        "extra_data": {"pattern": "religious_freedom_struggle", "hanukkah_origin": True},
     },
     {
         "name": "Roman Conquest of Judea",
@@ -620,7 +620,7 @@ BIBLICAL_EVENTS = [
         "era": "INTERTESTAMENTAL",
         "event_type": "MILITARY",
         "historical_source": "Josephus, Antiquities",
-        "metadata": {
+        "extra_data": {
             "empire_transition": "Greece to Rome",
             "daniel_fourth_kingdom": True,
             "messianic_expectation_heightens": True,
@@ -636,7 +636,7 @@ BIBLICAL_EVENTS = [
         "era": "NEW_TESTAMENT",
         "event_type": "RELIGIOUS",
         "biblical_source": "Matthew 1-2, Luke 1-2",
-        "metadata": {
+        "extra_data": {
             "messianic_arrival": True,
             "davidic_lineage": True,
             "prophetic_fulfillment": ["Isaiah 7:14", "Micah 5:2"],
@@ -651,7 +651,7 @@ BIBLICAL_EVENTS = [
         "era": "NEW_TESTAMENT",
         "event_type": "RELIGIOUS",
         "biblical_source": "Matthew 3, Mark 1, Luke 3, John 1",
-        "metadata": {"forerunner_role": True, "baptism_emphasis": True},
+        "extra_data": {"forerunner_role": True, "baptism_emphasis": True},
     },
     {
         "name": "Baptism of Jesus",
@@ -660,7 +660,7 @@ BIBLICAL_EVENTS = [
         "era": "NEW_TESTAMENT",
         "event_type": "RELIGIOUS",
         "biblical_source": "Matthew 3:13-17",
-        "metadata": {"ministry_inauguration": True, "trinitarian_manifestation": True},
+        "extra_data": {"ministry_inauguration": True, "trinitarian_manifestation": True},
     },
     {
         "name": "Crucifixion and Resurrection",
@@ -669,7 +669,7 @@ BIBLICAL_EVENTS = [
         "era": "NEW_TESTAMENT",
         "event_type": "RELIGIOUS",
         "biblical_source": "Matthew 27-28, Mark 15-16, Luke 23-24, John 19-20",
-        "metadata": {
+        "extra_data": {
             "atonement": True,
             "foundational": True,
             "resurrection_victory": True,
@@ -684,7 +684,7 @@ BIBLICAL_EVENTS = [
         "era": "NEW_TESTAMENT",
         "event_type": "RELIGIOUS",
         "biblical_source": "Acts 2",
-        "metadata": {
+        "extra_data": {
             "church_begins": True,
             "spirit_age_inaugurated": True,
             "multilingual_preaching": True,
@@ -699,7 +699,7 @@ BIBLICAL_EVENTS = [
         "era": "NEW_TESTAMENT",
         "event_type": "RELIGIOUS",
         "biblical_source": "Acts 9",
-        "metadata": {"pattern": "enemy_to_advocate", "gentile_mission_begins": True},
+        "extra_data": {"pattern": "enemy_to_advocate", "gentile_mission_begins": True},
     },
     {
         "name": "Jerusalem Council",
@@ -708,7 +708,7 @@ BIBLICAL_EVENTS = [
         "era": "NEW_TESTAMENT",
         "event_type": "RELIGIOUS",
         "biblical_source": "Acts 15",
-        "metadata": {"theological_clarification": True, "jewish_gentile_unity": True},
+        "extra_data": {"theological_clarification": True, "jewish_gentile_unity": True},
     },
     {
         "name": "Paul Imprisoned in Rome",
@@ -718,7 +718,7 @@ BIBLICAL_EVENTS = [
         "era": "EARLY_CHURCH",
         "event_type": "POLITICAL",
         "biblical_source": "Acts 28",
-        "metadata": {"letters": ["Ephesians", "Philippians", "Colossians", "Philemon"]},
+        "extra_data": {"letters": ["Ephesians", "Philippians", "Colossians", "Philemon"]},
     },
     {
         "name": "Nero's Persecution",
@@ -728,7 +728,7 @@ BIBLICAL_EVENTS = [
         "era": "EARLY_CHURCH",
         "event_type": "POLITICAL",
         "historical_source": "Tacitus, Annals 15.44",
-        "metadata": {"pattern": "persecution_church_growth", "rome_turns_hostile": True},
+        "extra_data": {"pattern": "persecution_church_growth", "rome_turns_hostile": True},
     },
     {
         "name": "Destruction of Jerusalem by Rome",
@@ -738,7 +738,7 @@ BIBLICAL_EVENTS = [
         "event_type": "MILITARY",
         "biblical_source": "Luke 21:20-24 (prophecy)",
         "historical_source": "Josephus, Wars of the Jews",
-        "metadata": {
+        "extra_data": {
             "temple_era_ends": True,
             "jesus_prophecy_fulfilled": True,
             "pattern": "covenant_unfaithfulness_judgment",

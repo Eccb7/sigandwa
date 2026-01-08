@@ -26,8 +26,8 @@ class WorldIndicator(Base):
     data_source = Column(String(255), nullable=True)
     timestamp = Column(DateTime, default=datetime.utcnow, index=True)
 
-    # Metadata
-    metadata = Column(JSON, nullable=True)
+    # Extra data
+    extra_data = Column(JSON, nullable=True)
 
 
 class SimulationScenario(Base):

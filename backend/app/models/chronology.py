@@ -87,7 +87,7 @@ class ChronologyEvent(Base):
     historical_source = Column(Text, nullable=True)  # Historical references
 
     # Additional structured data
-    metadata = Column(JSON, nullable=True)  # Flexible schema for extra attributes
+    extra_data = Column(JSON, nullable=True)  # Flexible schema for extra attributes
 
     # Relationships
     actors = relationship("Actor", secondary="event_actors", back_populates="events")

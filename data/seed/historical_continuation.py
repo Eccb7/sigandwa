@@ -15,7 +15,7 @@ HISTORICAL_CONTINUATION = [
         "era": "ROMAN_EMPIRE",
         "event_type": "MILITARY",
         "historical_source": "Cassius Dio, Roman History",
-        "metadata": {"pattern": "repeated_rebellion_intensified_dispersion", "jews_banned_from_jerusalem": True},
+        "extra_data": {"pattern": "repeated_rebellion_intensified_dispersion", "jews_banned_from_jerusalem": True},
     },
     {
         "name": "Edict of Milan",
@@ -24,7 +24,7 @@ HISTORICAL_CONTINUATION = [
         "era": "ROMAN_EMPIRE",
         "event_type": "POLITICAL",
         "historical_source": "Lactantius, De Mortibus Persecutorum",
-        "metadata": {
+        "extra_data": {
             "pattern": "persecution_to_acceptance",
             "church_state_alliance_begins": True,
             "transition_point": True,
@@ -37,7 +37,7 @@ HISTORICAL_CONTINUATION = [
         "era": "ROMAN_EMPIRE",
         "event_type": "RELIGIOUS",
         "historical_source": "Eusebius, Life of Constantine",
-        "metadata": {"doctrinal_standardization": True, "imperial_involvement": True},
+        "extra_data": {"doctrinal_standardization": True, "imperial_involvement": True},
     },
     {
         "name": "Division of Roman Empire",
@@ -46,7 +46,7 @@ HISTORICAL_CONTINUATION = [
         "era": "ROMAN_EMPIRE",
         "event_type": "POLITICAL",
         "historical_source": "Various Roman sources",
-        "metadata": {"pattern": "unity_to_fragmentation", "begins_decline": True},
+        "extra_data": {"pattern": "unity_to_fragmentation", "begins_decline": True},
     },
     {
         "name": "Fall of Western Roman Empire",
@@ -55,7 +55,7 @@ HISTORICAL_CONTINUATION = [
         "era": "ROMAN_EMPIRE",
         "event_type": "POLITICAL",
         "historical_source": "Multiple sources",
-        "metadata": {
+        "extra_data": {
             "pattern": "empire_collapse",
             "daniel_fourth_kingdom_divided": True,
             "power_vacuum": True,
@@ -69,7 +69,7 @@ HISTORICAL_CONTINUATION = [
         "era": "MEDIEVAL",
         "event_type": "RELIGIOUS",
         "historical_source": "Islamic sources",
-        "metadata": {"new_religious_power": True, "geopolitical_shift_begins": True},
+        "extra_data": {"new_religious_power": True, "geopolitical_shift_begins": True},
     },
     {
         "name": "Islamic Conquest of Jerusalem",
@@ -78,7 +78,7 @@ HISTORICAL_CONTINUATION = [
         "era": "MEDIEVAL",
         "event_type": "MILITARY",
         "historical_source": "Byzantine and Islamic sources",
-        "metadata": {"control_shift": "Christian to Muslim", "ongoing_pattern": "jerusalem_contested"},
+        "extra_data": {"control_shift": "Christian to Muslim", "ongoing_pattern": "jerusalem_contested"},
     },
     {
         "name": "Great Schism",
@@ -87,7 +87,7 @@ HISTORICAL_CONTINUATION = [
         "era": "MEDIEVAL",
         "event_type": "RELIGIOUS",
         "historical_source": "Church records",
-        "metadata": {"pattern": "unity_to_fragmentation", "doctrinal_political_fusion": True},
+        "extra_data": {"pattern": "unity_to_fragmentation", "doctrinal_political_fusion": True},
     },
     {
         "name": "First Crusade",
@@ -97,7 +97,7 @@ HISTORICAL_CONTINUATION = [
         "era": "MEDIEVAL",
         "event_type": "MILITARY",
         "historical_source": "Crusade chronicles",
-        "metadata": {
+        "extra_data": {
             "pattern": "religious_military_fusion",
             "jerusalem_control_shift": True,
             "east_west_conflict": True,
@@ -110,7 +110,7 @@ HISTORICAL_CONTINUATION = [
         "era": "MEDIEVAL",
         "event_type": "MILITARY",
         "historical_source": "Multiple sources",
-        "metadata": {"pattern": "jerusalem_repeatedly_contested"},
+        "extra_data": {"pattern": "jerusalem_repeatedly_contested"},
     },
     {
         "name": "Fall of Constantinople",
@@ -119,7 +119,7 @@ HISTORICAL_CONTINUATION = [
         "era": "MEDIEVAL",
         "event_type": "MILITARY",
         "historical_source": "Byzantine and Ottoman sources",
-        "metadata": {
+        "extra_data": {
             "pattern": "empire_collapse",
             "christian_east_falls": True,
             "islamic_expansion": True,
@@ -133,7 +133,7 @@ HISTORICAL_CONTINUATION = [
         "era": "REFORMATION",
         "event_type": "RELIGIOUS",
         "historical_source": "Luther's writings",
-        "metadata": {
+        "extra_data": {
             "pattern": "corruption_reform",
             "christian_fragmentation_accelerates": True,
             "scripture_accessibility": True,
@@ -146,7 +146,7 @@ HISTORICAL_CONTINUATION = [
         "era": "REFORMATION",
         "event_type": "POLITICAL",
         "historical_source": "English state records",
-        "metadata": {"pattern": "political_religious_fusion", "national_churches": True},
+        "extra_data": {"pattern": "political_religious_fusion", "national_churches": True},
     },
     {
         "name": "Council of Trent",
@@ -156,7 +156,7 @@ HISTORICAL_CONTINUATION = [
         "era": "REFORMATION",
         "event_type": "RELIGIOUS",
         "historical_source": "Council documents",
-        "metadata": {"catholic_reform": True, "protestant_catholic_divide_solidifies": True},
+        "extra_data": {"catholic_reform": True, "protestant_catholic_divide_solidifies": True},
     },
     {
         "name": "Thirty Years' War",
@@ -166,7 +166,7 @@ HISTORICAL_CONTINUATION = [
         "era": "REFORMATION",
         "event_type": "MILITARY",
         "historical_source": "Multiple European sources",
-        "metadata": {
+        "extra_data": {
             "pattern": "religious_violence",
             "protestant_catholic_conflict": True,
             "weakens_religious_authority": True,
@@ -179,7 +179,7 @@ HISTORICAL_CONTINUATION = [
         "era": "REFORMATION",
         "event_type": "POLITICAL",
         "historical_source": "Treaty documents",
-        "metadata": {
+        "extra_data": {
             "pattern": "war_to_fragmentation",
             "sovereignty_principle": True,
             "religious_power_declines": True,
@@ -193,7 +193,7 @@ HISTORICAL_CONTINUATION = [
         "era": "COLONIAL",
         "event_type": "POLITICAL",
         "historical_source": "English parliamentary records",
-        "metadata": {"limited_monarchy": True, "parliamentary_power": True},
+        "extra_data": {"limited_monarchy": True, "parliamentary_power": True},
     },
     {
         "name": "American Revolution",
@@ -203,7 +203,7 @@ HISTORICAL_CONTINUATION = [
         "era": "COLONIAL",
         "event_type": "POLITICAL",
         "historical_source": "Multiple sources",
-        "metadata": {
+        "extra_data": {
             "pattern": "colony_independence",
             "republican_model": True,
             "anti_monarchical": True,
@@ -217,7 +217,7 @@ HISTORICAL_CONTINUATION = [
         "era": "COLONIAL",
         "event_type": "POLITICAL",
         "historical_source": "Multiple sources",
-        "metadata": {
+        "extra_data": {
             "pattern": "elite_overthrow",
             "anti_religious": True,
             "terror_violence": True,
@@ -232,7 +232,7 @@ HISTORICAL_CONTINUATION = [
         "era": "COLONIAL",
         "event_type": "MILITARY",
         "historical_source": "Multiple sources",
-        "metadata": {"pattern": "imperial_overreach", "nationalism_rises": True},
+        "extra_data": {"pattern": "imperial_overreach", "nationalism_rises": True},
     },
     # MODERN ERA
     {
@@ -243,7 +243,7 @@ HISTORICAL_CONTINUATION = [
         "era": "MODERN",
         "event_type": "MILITARY",
         "historical_source": "Multiple sources",
-        "metadata": {
+        "extra_data": {
             "pattern": "elite_overproduction_violence",
             "empires_fall": ["Ottoman", "Austro-Hungarian", "Russian", "German"],
             "versailles_seeds_ww2": True,
@@ -256,7 +256,7 @@ HISTORICAL_CONTINUATION = [
         "era": "MODERN",
         "event_type": "POLITICAL",
         "historical_source": "British government documents",
-        "metadata": {"jewish_return_begins": True, "prophetic_interest": True},
+        "extra_data": {"jewish_return_begins": True, "prophetic_interest": True},
     },
     {
         "name": "Russian Revolution",
@@ -265,7 +265,7 @@ HISTORICAL_CONTINUATION = [
         "era": "MODERN",
         "event_type": "POLITICAL",
         "historical_source": "Multiple sources",
-        "metadata": {
+        "extra_data": {
             "pattern": "revolution_totalitarianism",
             "anti_religious": True,
             "mass_violence": True,
@@ -279,7 +279,7 @@ HISTORICAL_CONTINUATION = [
         "era": "MODERN",
         "event_type": "MILITARY",
         "historical_source": "Multiple sources",
-        "metadata": {
+        "extra_data": {
             "pattern": "versailles_consequences",
             "holocaust": 6000000,
             "nuclear_weapons": True,
@@ -293,7 +293,7 @@ HISTORICAL_CONTINUATION = [
         "era": "MODERN",
         "event_type": "POLITICAL",
         "historical_source": "UN records, Israeli sources",
-        "metadata": {
+        "extra_data": {
             "pattern": "exile_restoration",
             "jewish_sovereignty_restored": True,
             "prophetic_significance": True,
@@ -308,7 +308,7 @@ HISTORICAL_CONTINUATION = [
         "era": "CONTEMPORARY",
         "event_type": "POLITICAL",
         "historical_source": "Multiple sources",
-        "metadata": {
+        "extra_data": {
             "pattern": "ideological_empire_collapse",
             "us_unipolarity": True,
             "economic_exhaustion": True,
@@ -321,7 +321,7 @@ HISTORICAL_CONTINUATION = [
         "era": "CONTEMPORARY",
         "event_type": "MILITARY",
         "historical_source": "Multiple sources",
-        "metadata": {
+        "extra_data": {
             "pattern": "asymmetric_warfare",
             "civilizational_conflict": True,
             "middle_east_wars_follow": True,
@@ -334,7 +334,7 @@ HISTORICAL_CONTINUATION = [
         "era": "CONTEMPORARY",
         "event_type": "ECONOMIC",
         "historical_source": "Financial records",
-        "metadata": {
+        "extra_data": {
             "pattern": "financial_excess_collapse",
             "trust_erosion": True,
             "populism_follows": True,
@@ -348,7 +348,7 @@ HISTORICAL_CONTINUATION = [
         "era": "CONTEMPORARY",
         "event_type": "NATURAL",
         "historical_source": "WHO, medical journals",
-        "metadata": {
+        "extra_data": {
             "pattern": "plague_social_disruption",
             "institutional_trust_decline": True,
             "supply_chain_fragility": True,
