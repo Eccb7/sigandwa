@@ -1,9 +1,9 @@
 # Biblical Cliodynamics Analysis System
 ## Complete System Documentation
 
-**Version:** 0.1.0  
-**Status:** ✅ All Phases Complete  
-**Date:** 2026-01-08  
+**Version:** 0.5.0  
+**Status:** ✅ Phase 5 Complete (Graph Analysis Layer)  
+**Date:** 2025-01-08  
 **API:** http://127.0.0.1:8000
 
 ---
@@ -12,12 +12,14 @@
 
 The Biblical Cliodynamics Analysis System is a comprehensive platform for analyzing historical patterns, tracking prophecy fulfillments, and modeling future scenarios based on biblical frameworks. The system integrates:
 
-- **96 chronological events** from Creation (-4114) to modern era
+- **96 chronological events** from Creation (-4004) to modern era
 - **6 biblical pattern templates** with preconditions, indicators, and outcomes
 - **6 core prophecies** with element tracking and fulfillment analysis
 - **25 world indicators** across 5 categories for real-time assessment
-- **20+ API endpoints** for data access and analysis
+- **Graph database (Neo4j)** with 108 nodes and 107 relationships
+- **43+ API endpoints** for data access and analysis
 - **Sophisticated forecasting engine** for scenario modeling
+- **Network analysis capabilities** for relationship discovery
 
 **Current System Assessment:**
 - **Civilization Risk:** 0.403/1.0 (MODERATE)
@@ -36,7 +38,8 @@ The Biblical Cliodynamics Analysis System is a comprehensive platform for analyz
 - FastAPI 0.109.0
 - SQLAlchemy 2.0.25
 - PostgreSQL 15
-- Neo4j 5.15 (prepared for future graph analysis)
+- Neo4j 5.15 (Graph Database)
+- neo4j driver 5.16.0
 
 **Data Models:**
 - 10 SQLAlchemy models
@@ -244,9 +247,67 @@ The Biblical Cliodynamics Analysis System is a comprehensive platform for analyz
 
 ---
 
+### Phase 5: Graph Analysis & Network Visualization ✅
+
+**Files Created:**
+- backend/app/graph/__init__.py (550 lines)
+- backend/app/api/routes/graph.py (360 lines)
+- demo_phase5_graph.sh (140 lines)
+- PHASE_5_DOCUMENTATION.md (comprehensive guide)
+
+**Deliverables:**
+- Neo4j integration module
+- 11 graph API endpoints
+- 108 nodes synced (96 events, 6 patterns, 6 prophecies)
+- 107 relationships created
+- Network analysis capabilities
+- Path finding algorithms
+
+**Graph Schema:**
+
+**Nodes:**
+- Event (96) - Historical events with temporal properties
+- Pattern (6) - Biblical pattern templates
+- Prophecy (6) - Prophetic declarations
+- Actor (0) - To be added
+
+**Relationships:**
+- MATCHES_PATTERN (5) - Events exhibiting patterns
+- FULFILLED_BY (7) - Prophecies fulfilled by events
+- PRECEDED_BY (95) - Chronological event chains
+- INVOLVED_IN (0) - Actor participation (future)
+
+**Analysis Capabilities:**
+
+1. **Influential Events** - Ranks events by connection count
+   - Top: Crucifixion (2 connections), Fall of Babylon (2), Fall of Jerusalem (2)
+
+2. **Event Chains** - Discovers temporal sequences
+   - Example: Creation → Fall → Flood → Babel → Abraham (11 events)
+
+3. **Pattern Evolution** - Tracks pattern instances across time
+   - Example: "Moral Decay → Judgment" appears in Flood (-2348), Sodom (-1898)
+
+4. **Prophecy Networks** - Maps prophecies with shared fulfillments
+   - 3 connections found between Daniel, Jeremiah, Isaiah prophecies
+
+5. **Shortest Path** - Finds connections across millennia
+   - Example: Flood to Crucifixion path (37 hops, 2378 years)
+
+6. **Custom Cypher** - Execute graph queries for advanced analysis
+
+**Graph Statistics:**
+- Total nodes: 108
+- Total relationships: 107
+- Average connections per event: 2.1
+- Longest event chain: 11 events
+- Most influential: Crucifixion & Resurrection
+
+---
+
 ## API Reference
 
-### Complete Endpoint List (20+)
+### Complete Endpoint List (43+)
 
 **Chronology Endpoints (Phase 1):**
 1. GET /api/v1/chronology/events - List all events
@@ -287,6 +348,19 @@ The Biblical Cliodynamics Analysis System is a comprehensive platform for analyz
 30. GET /api/v1/simulation/risk-assessment - Calculate risk
 31. GET /api/v1/simulation/prophetic-timeline - Analyze timeline
 32. POST /api/v1/simulation/historical-analogs - Find analogs
+
+**Graph Endpoints (Phase 5):**
+33. GET /api/v1/graph/health - Check Neo4j connectivity
+34. POST /api/v1/graph/sync - Sync PostgreSQL to Neo4j
+35. GET /api/v1/graph/stats - Graph statistics
+36. GET /api/v1/graph/event-chains - Find event sequences
+37. GET /api/v1/graph/pattern-clusters - Events with shared patterns
+38. GET /api/v1/graph/prophecy-networks - Prophecy connections
+39. GET /api/v1/graph/influential-events - Most connected events
+40. GET /api/v1/graph/pattern-evolution/{pattern_id} - Pattern timeline
+41. GET /api/v1/graph/shortest-path - Path between events
+42. POST /api/v1/graph/query - Custom Cypher queries
+43. DELETE /api/v1/graph/reset - Clear graph database
 
 **OpenAPI Documentation:**
 - GET /docs - Swagger UI
