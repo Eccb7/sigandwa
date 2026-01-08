@@ -339,13 +339,13 @@ class GraphAnalyzer:
 
     def find_event_chains(self, min_length: int = 3) -> List[Dict]:
         """Find chains of connected events."""
-        query = """
+        query = f"""
         MATCH path = (e1:Event)-[:PRECEDED_BY*{min_length}..10]->(e2:Event)
-        RETURN [node in nodes(path) | {
+        RETURN [node in nodes(path) | {{
             id: node.id,
             name: node.name,
             year: node.year
-        }] AS chain,
+        }}] AS chain,
         length(path) AS chain_length
         ORDER BY chain_length DESC
         LIMIT 20
