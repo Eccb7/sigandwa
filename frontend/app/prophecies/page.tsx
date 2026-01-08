@@ -32,15 +32,21 @@ function ProphecyCard({ prophecy, onClick }: ProphecyCardProps) {
       <p className="text-slate-600 text-sm mb-4 line-clamp-3 italic">"{prophecy.text}"</p>
       
       <div className="flex flex-wrap gap-2 mb-4">
-        {prophecy.keywords.slice(0, 3).map((keyword, idx) => (
-          <span key={idx} className="bg-slate-100 text-slate-700 text-xs px-2 py-1 rounded">
-            {keyword}
-          </span>
-        ))}
-        {prophecy.keywords.length > 3 && (
-          <span className="text-slate-500 text-xs px-2 py-1">
-            +{prophecy.keywords.length - 3} more
-          </span>
+        {prophecy.keywords && prophecy.keywords.length > 0 ? (
+          <>
+            {prophecy.keywords.slice(0, 3).map((keyword, idx) => (
+              <span key={idx} className="bg-slate-100 text-slate-700 text-xs px-2 py-1 rounded">
+                {keyword}
+              </span>
+            ))}
+            {prophecy.keywords.length > 3 && (
+              <span className="text-slate-500 text-xs px-2 py-1">
+                +{prophecy.keywords.length - 3} more
+              </span>
+            )}
+          </>
+        ) : (
+          <span className="text-slate-500 text-xs">No keywords</span>
         )}
       </div>
       
@@ -144,22 +150,30 @@ function ProphecyDetail({ prophecy, onClose }: ProphecyDetailProps) {
           <div className="mb-6">
             <h3 className="text-lg font-semibold text-slate-900 mb-3">Keywords</h3>
             <div className="flex flex-wrap gap-2">
-              {prophecy.keywords.map((keyword, idx) => (
-                <span key={idx} className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm">
-                  {keyword}
-                </span>
-              ))}
+              {prophecy.keywords && prophecy.keywords.length > 0 ? (
+                prophecy.keywords.map((keyword, idx) => (
+                  <span key={idx} className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm">
+                    {keyword}
+                  </span>
+                ))
+              ) : (
+                <span className="text-slate-500">No keywords specified</span>
+              )}
             </div>
           </div>
           
           <div className="mb-6">
             <h3 className="text-lg font-semibold text-slate-900 mb-3">Prophetic Elements</h3>
             <div className="grid md:grid-cols-2 gap-3">
-              {prophecy.elements.map((element, idx) => (
-                <div key={idx} className="bg-slate-50 rounded-lg p-3 border border-slate-200">
-                  <p className="text-slate-700">{element}</p>
-                </div>
-              ))}
+              {prophecy.elements && prophecy.elements.length > 0 ? (
+                prophecy.elements.map((element, idx) => (
+                  <div key={idx} className="bg-slate-50 rounded-lg p-3 border border-slate-200">
+                    <p className="text-slate-700">{element.text}</p>
+                  </div>
+                ))
+              ) : (
+                <p className="text-slate-500 col-span-2">No prophetic elements specified</p>
+              )}
             </div>
           </div>
           

@@ -31,7 +31,8 @@ function StatCard({ title, value, icon, color }: StatCardProps) {
 export default function GraphPage() {
   const [showSync, setShowSync] = useState(false);
   const [selectedChainLength, setSelectedChainLength] = useState(3);
-  const [searchNodeId, setSearchNodeId] = useState('');
+  const [searchNodeId1, setSearchNodeId1] = useState('');
+  const [searchNodeId2, setSearchNodeId2] = useState('');
   const [searchResult, setSearchResult] = useState<any>(null);
 
   const { data: stats, isLoading, refetch } = useQuery({
@@ -79,13 +80,21 @@ export default function GraphPage() {
   };
 
   const handleSearch = async () => {
-    if (!searchNodeId.trim()) return;
+    const id1 = parseInt(searchNodeId1);
+    const id2 = parseInt(searchNodeId2);
+    
+    if (!searchNodeId1.trim() || !searchNodeId2.trim()) return;
+    if (isNaN(id1) || isNaN(id2)) {
+      setSearchResult({ error: 'Please enter valid event IDs (numbers)' });
+      return;
+    }
+    
     try {
-      const response = await graphAPI.getShortestPath(searchNodeId, 'any');
+      const response = await graphAPI.getShortestPath(id1, id2);
       setSearchResult(response.data);
     } catch (error) {
       console.error('Search failed:', error);
-      setSearchResult(null);
+      setSearchResult({ error: 'Path not found or invalid event IDs' });
     }
   };
 
@@ -287,49 +296,74 @@ export default function GraphPage() {
       <div className="bg-white rounded-lg shadow-md p-6 border border-slate-200">
         <h2 className="text-xl font-semibold text-slate-900 mb-4">Path Finder</h2>
         <p className="text-slate-600 text-sm mb-4">
-          Find the shortest path between nodes in the knowledge graph.
+          Find the shortest path between two events in the knowledge graph. Enter event IDs (numbers).
         </p>
-        <div className="flex gap-2 mb-4">
-          <input
-            type="text"
-            value={searchNodeId}
-            onChange={(e) => setSearchNodeId(e.target.value)}
-            placeholder="Enter node ID or name..."
-            className="flex-1 px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <button
-            onClick={handleSearch}
-            className="flex items-center gap-2 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            <Search className="w-4 h-4" />
-            Find Path
-          </button>
+        <div className="grid md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-2">
+              Start Event ID
+            </label>
+            <input
+              type="number"
+              value={searchNodeId1}
+              onChange={(e) => setSearchNodeId1(e.target.value)}
+              placeholder="e.g., 1"
+              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-2">
+              End Event ID
+            </label>
+            <input
+              type="number"
+              value={searchNodeId2}
+              onChange={(e) => setSearchNodeId2(e.target.value)}
+              placeholder="e.g., 50"
+              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
         </div>
+        <button
+          onClick={handleSearch}
+          className="flex items-center gap-2 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors w-full md:w-auto"
+        >
+          <Search className="w-4 h-4" />
+          Find Path
+        </button>
         {searchResult && (
-          <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
-            <p className="text-sm font-semibold text-blue-900 mb-2">
-              Path found: {searchResult.path_length} nodes
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {searchResult.path_nodes?.map((node: any, idx: number) => (
-                <span key={idx} className="bg-white text-blue-700 px-3 py-1 rounded-full text-sm border border-blue-300">
-                  {node.name || node.reference || `Node ${idx + 1}`}
-                </span>
-              ))}
-            </div>
-            {searchResult.relationship_types && searchResult.relationship_types.length > 0 && (
-              <div className="mt-3">
-                <p className="text-xs text-blue-700 mb-1">Relationships:</p>
-                <div className="flex flex-wrap gap-1">
-                  {searchResult.relationship_types.map((rel: string, idx: number) => (
-                    <span key={idx} className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">
-                      {rel}
+          <>
+            {searchResult.error ? (
+              <div className="bg-red-50 rounded-lg p-4 border border-red-200 mt-4">
+                <p className="text-sm text-red-800">{searchResult.error}</p>
+              </div>
+            ) : (
+              <div className="bg-blue-50 rounded-lg p-4 border border-blue-200 mt-4">
+                <p className="text-sm font-semibold text-blue-900 mb-2">
+                  Path found: {searchResult.path_length} nodes
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {searchResult.path_nodes?.map((node: any, idx: number) => (
+                    <span key={idx} className="bg-white text-blue-700 px-3 py-1 rounded-full text-sm border border-blue-300">
+                      {node.name || node.reference || `Node ${idx + 1}`}
                     </span>
                   ))}
                 </div>
+                {searchResult.relationship_types && searchResult.relationship_types.length > 0 && (
+                  <div className="mt-3">
+                    <p className="text-xs text-blue-700 mb-1">Relationships:</p>
+                    <div className="flex flex-wrap gap-1">
+                      {searchResult.relationship_types.map((rel: string, idx: number) => (
+                        <span key={idx} className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">
+                          {rel}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
-          </div>
+          </>
         )}
       </div>
     </div>

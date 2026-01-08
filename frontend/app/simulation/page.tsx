@@ -16,7 +16,7 @@ function getCategoryIcon(category: string) {
   }
 }
 
-function getTrendIcon(trend: string) {
+function getTrendIcon(trend?: string) {
   switch (trend) {
     case 'increasing': return TrendingUp;
     case 'decreasing': return TrendingDown;
@@ -24,7 +24,7 @@ function getTrendIcon(trend: string) {
   }
 }
 
-function getTrendColor(trend: string) {
+function getTrendColor(trend?: string) {
   switch (trend) {
     case 'increasing': return 'text-red-500';
     case 'decreasing': return 'text-green-500';
@@ -62,8 +62,8 @@ function IndicatorCard({ indicator }: IndicatorCardProps) {
       </div>
       
       <div className="flex items-center justify-between text-xs text-slate-500">
-        <span>Source: {indicator.source}</span>
-        <span>{new Date(indicator.last_updated).toLocaleDateString()}</span>
+        <span>Source: {indicator.source || 'Unknown'}</span>
+        <span>{indicator.last_updated ? new Date(indicator.last_updated).toLocaleDateString() : 'N/A'}</span>
       </div>
     </div>
   );
@@ -117,19 +117,12 @@ export default function SimulationPage() {
     },
   });
 
-  const { data: preconditions } = useQuery({
-    queryKey: ['pattern-preconditions'],
-    queryFn: async () => {
-      const response = await simulationAPI.getPreconditions();
-      return response.data;
-    },
-  });
-
   const filteredIndicators = indicators?.filter((ind: WorldIndicator) => 
     selectedCategory === 'all' || ind.category === selectedCategory
   );
 
-  const categories = ['all', ...Array.from(new Set(indicators?.map((ind: WorldIndicator) => ind.category) || []))];
+  const uniqueCategories = Array.from(new Set(indicators?.map((ind: WorldIndicator) => ind.category) || [])) as string[];
+  const categories: string[] = ['all', ...uniqueCategories];
 
   if (indicatorsLoading || riskLoading) {
     return (
@@ -250,32 +243,6 @@ export default function SimulationPage() {
           <IndicatorCard key={indicator.id} indicator={indicator} />
         ))}
       </div>
-
-      {preconditions && preconditions.length > 0 && (
-        <div className="mt-8 bg-white rounded-lg shadow-md p-6 border border-slate-200">
-          <h2 className="text-xl font-semibold text-slate-900 mb-4">Active Pattern Preconditions</h2>
-          <div className="grid md:grid-cols-2 gap-4">
-            {preconditions.slice(0, 6).map((precondition: any, idx: number) => (
-              <div key={idx} className="bg-slate-50 rounded-lg p-4 border border-slate-200">
-                <h3 className="font-semibold text-slate-900 mb-2">{precondition.pattern_name}</h3>
-                <div className="space-y-2">
-                  {precondition.matched_conditions?.map((condition: string, i: number) => (
-                    <div key={i} className="flex items-start">
-                      <span className="text-green-500 mr-2">✓</span>
-                      <span className="text-sm text-slate-600">{condition}</span>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-3 pt-3 border-t border-slate-200">
-                  <span className="text-xs text-slate-500">
-                    {precondition.matched_count || 0} / {precondition.total_conditions || 0} conditions met
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

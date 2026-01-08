@@ -95,12 +95,12 @@ function PatternDetail({ pattern, onClose }: PatternDetailProps) {
                 Preconditions
               </h3>
               <ul className="space-y-2">
-                {pattern.preconditions.map((precondition, idx) => (
+                {pattern.preconditions?.map((precondition, idx) => (
                   <li key={idx} className="flex items-start">
                     <span className="text-orange-500 mr-2">•</span>
                     <span className="text-slate-600">{precondition}</span>
                   </li>
-                ))}
+                )) || <li className="text-slate-500">No preconditions specified</li>}
               </ul>
             </div>
             
@@ -110,12 +110,12 @@ function PatternDetail({ pattern, onClose }: PatternDetailProps) {
                 Key Indicators
               </h3>
               <ul className="space-y-2">
-                {pattern.indicators.map((indicator, idx) => (
+                {pattern.indicators?.map((indicator, idx) => (
                   <li key={idx} className="flex items-start">
                     <span className="text-blue-500 mr-2">•</span>
                     <span className="text-slate-600">{indicator}</span>
                   </li>
-                ))}
+                )) || <li className="text-slate-500">No indicators specified</li>}
               </ul>
             </div>
           </div>
@@ -126,19 +126,19 @@ function PatternDetail({ pattern, onClose }: PatternDetailProps) {
               Typical Outcomes
             </h3>
             <ul className="space-y-2">
-              {pattern.outcomes.map((outcome, idx) => (
+              {pattern.outcomes?.map((outcome, idx) => (
                 <li key={idx} className="flex items-start">
                   <span className="text-green-500 mr-2">•</span>
                   <span className="text-slate-600">{outcome}</span>
                 </li>
-              ))}
+              )) || <li className="text-slate-500">No outcomes specified</li>}
             </ul>
           </div>
           
           <div className="bg-slate-50 rounded-lg p-4 mb-6">
             <div className="flex items-center justify-between">
               <span className="text-slate-600">Typical Duration:</span>
-              <span className="text-lg font-semibold text-slate-900">{pattern.typical_duration_years} years</span>
+              <span className="text-lg font-semibold text-slate-900">{pattern.typical_duration_years || 'N/A'} {pattern.typical_duration_years && 'years'}</span>
             </div>
           </div>
           
@@ -162,7 +162,7 @@ function PatternDetail({ pattern, onClose }: PatternDetailProps) {
                       </div>
                     </div>
                     <p className="text-sm text-slate-600">
-                      Identified: {new Date(instance.identified_date).toLocaleDateString()}
+                      Identified: {instance.identified_date ? new Date(instance.identified_date).toLocaleDateString() : 'Unknown'}
                     </p>
                   </div>
                 ))}
