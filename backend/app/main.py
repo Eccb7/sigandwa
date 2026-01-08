@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
 from app.config import settings
-from app.api.routes import chronology, events, patterns, prophecies, simulation
+from app.api.routes import chronology, events, patterns, prophecies, simulation, graph
 
 
 @asynccontextmanager
@@ -43,6 +43,7 @@ app.include_router(events.router, prefix="/api/v1/events", tags=["events"])
 app.include_router(patterns.router, prefix="/api/v1/patterns", tags=["patterns"])
 app.include_router(prophecies.router, prefix="/api/v1/prophecies", tags=["prophecies"])
 app.include_router(simulation.router, prefix="/api/v1/simulation", tags=["simulation"])
+app.include_router(graph.router, prefix="/api/v1/graph", tags=["graph"])
 
 
 @app.get("/")
