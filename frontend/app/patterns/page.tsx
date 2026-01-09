@@ -3,15 +3,16 @@
 import { useQuery } from '@tanstack/react-query';
 import { patternAPI, graphAPI } from '@/lib/api';
 import { Pattern, PatternInstance } from '@/lib/types';
-import { Activity, Clock, AlertCircle, TrendingUp, CheckCircle } from 'lucide-react';
-import { useState } from 'react';
+import { Activity, Clock, AlertCircle, TrendingUp, CheckCircle, Download } from 'lucide-react';
+import { useState, useMemo, memo } from 'react';
+import { exportToCSV, exportToJSON } from '@/lib/utils';
 
 interface PatternCardProps {
   pattern: Pattern;
   onClick: () => void;
 }
 
-function PatternCard({ pattern, onClick }: PatternCardProps) {
+const PatternCard = memo(function PatternCard({ pattern, onClick }: PatternCardProps) {
   return (
     <div 
       onClick={onClick}
@@ -42,7 +43,7 @@ function PatternCard({ pattern, onClick }: PatternCardProps) {
       </div>
     </div>
   );
-}
+});
 
 interface PatternDetailProps {
   pattern: Pattern;
@@ -211,6 +212,30 @@ export default function PatternsPage() {
     },
   });
 
+  const handleExport = useMemo(() => {
+    return (format: 'csv' | 'json') => {
+      if (!patterns) return;
+      
+      const exportData = patterns.map((p: Pattern) => ({
+        id: p.id,
+        name: p.name,
+        type: p.pattern_type,
+        description: p.description,
+        duration_years: p.typical_duration_years,
+        preconditions: p.preconditions?.join('; '),
+        indicators: p.indicators?.join('; '),
+        outcomes: p.outcomes?.join('; ')
+      }));
+      
+      const timestamp = new Date().toISOString().split('T')[0];
+      if (format === 'csv') {
+        exportToCSV(exportData, `patterns-${timestamp}.csv`);
+      } else {
+        exportToJSON(patterns, `patterns-${timestamp}.json`);
+      }
+    };
+  }, [patterns]);
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -233,16 +258,36 @@ export default function PatternsPage() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-slate-900 mb-2">Pattern Analysis</h1>
-        <p className="text-slate-600">
-          Recurring civilizational patterns identified throughout history. 
-          {patterns && ` Currently tracking ${patterns.length} pattern templates.`}
-        </p>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="mb-6 sm:mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-2">Pattern Analysis</h1>
+            <p className="text-sm sm:text-base text-slate-600">
+              Recurring civilizational patterns identified throughout history. 
+              {patterns && ` Currently tracking ${patterns.length} pattern templates.`}
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <button
+              onClick={() => handleExport('csv')}
+              className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm"
+            >
+              <Download className="w-4 h-4" />
+              <span className="hidden sm:inline">CSV</span>
+            </button>
+            <button
+              onClick={() => handleExport('json')}
+              className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
+            >
+              <Download className="w-4 h-4" />
+              <span className="hidden sm:inline">JSON</span>
+            </button>
+          </div>
+        </div>
       </div>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {patterns && patterns.map((pattern: Pattern) => (
           <PatternCard 
             key={pattern.id} 

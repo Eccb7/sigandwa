@@ -13,6 +13,7 @@ import {
   X
 } from 'lucide-react';
 import { useState } from 'react';
+import GlobalSearch from './GlobalSearch';
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: Home },
@@ -37,6 +38,12 @@ export function Navigation() {
               Sigandwa
             </h1>
           </div>
+          
+          {/* Global Search */}
+          <div className="mt-5 px-2">
+            <GlobalSearch />
+          </div>
+          
           <div className="mt-5 flex-1 flex flex-col">
             <nav className="flex-1 px-2 pb-4 space-y-1">
               {navigation.map((item) => {

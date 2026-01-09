@@ -1,9 +1,15 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { graphAPI } from '@/lib/api';
+import { graphAPI, chronologyAPI, patternAPI, prophecyAPI } from '@/lib/api';
 import { Network, GitBranch, TrendingUp, Search, RefreshCw, Database } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
+import dynamic from 'next/dynamic';
+
+const VisNetwork = dynamic(() => import('@/components/VisNetwork'), {
+  ssr: false,
+  loading: () => <div className="h-[700px] bg-slate-100 animate-pulse rounded-lg"></div>
+});
 
 interface StatCardProps {
   title: string;
@@ -34,6 +40,7 @@ export default function GraphPage() {
   const [searchNodeId1, setSearchNodeId1] = useState('');
   const [searchNodeId2, setSearchNodeId2] = useState('');
   const [searchResult, setSearchResult] = useState<any>(null);
+  const [showVisualization, setShowVisualization] = useState(true);
 
   const { data: stats, isLoading, refetch } = useQuery({
     queryKey: ['graph-stats'],
@@ -42,6 +49,112 @@ export default function GraphPage() {
       return response.data;
     },
   });
+
+  // Fetch all data for network visualization
+  const { data: events } = useQuery({
+    queryKey: ['all-events'],
+    queryFn: async () => {
+      const response = await chronologyAPI.getEvents();
+      return response.data;
+    },
+  });
+
+  const { data: patterns } = useQuery({
+    queryKey: ['all-patterns'],
+    queryFn: async () => {
+      const response = await patternAPI.getPatterns();
+      return response.data;
+    },
+  });
+
+  const { data: prophecies } = useQuery({
+    queryKey: ['all-prophecies'],
+    queryFn: async () => {
+      const response = await prophecyAPI.getProphecies();
+      return response.data;
+    },
+  });
+
+  // Prepare nodes and edges for vis.js
+  const { nodes, edges } = useMemo(() => {
+    const nodes: any[] = [];
+    const edges: any[] = [];
+
+    // Add event nodes
+    if (events) {
+      events.forEach((event: any) => {
+        nodes.push({
+          id: event.id,
+          label: event.name,
+          type: 'event',
+          title: `${event.name} (${event.year_start})${event.description ? '\n' + event.description : ''}`
+        });
+      });
+
+      // Add PRECEDED_BY edges between events
+      events.forEach((event: any, idx: number) => {
+        if (idx > 0) {
+          edges.push({
+            from: events[idx - 1].id,
+            to: event.id,
+            type: 'PRECEDED_BY',
+            label: 'precedes'
+          });
+        }
+      });
+    }
+
+    // Add pattern nodes
+    if (patterns) {
+      patterns.forEach((pattern: any) => {
+        const patternId = 1000 + pattern.id; // Offset to avoid ID conflicts
+        nodes.push({
+          id: patternId,
+          label: pattern.name,
+          type: 'pattern',
+          title: `Pattern: ${pattern.name}\n${pattern.description || ''}`
+        });
+
+        // Link patterns to events (mock data - in real app would come from backend)
+        // For demonstration, link first few events to patterns
+        if (events && events.length > 0) {
+          const eventIndex = pattern.id % events.length;
+          edges.push({
+            from: events[eventIndex].id,
+            to: patternId,
+            type: 'MATCHES_PATTERN',
+            label: 'matches'
+          });
+        }
+      });
+    }
+
+    // Add prophecy nodes
+    if (prophecies) {
+      prophecies.forEach((prophecy: any) => {
+        const prophecyId = 2000 + prophecy.id; // Offset to avoid ID conflicts
+        nodes.push({
+          id: prophecyId,
+          label: prophecy.reference || prophecy.text?.substring(0, 30) + '...',
+          type: 'prophecy',
+          title: `Prophecy: ${prophecy.reference || ''}\n${prophecy.text?.substring(0, 100) || ''}`
+        });
+
+        // Link prophecies to events (mock data)
+        if (events && events.length > 0) {
+          const eventIndex = prophecy.id % events.length;
+          edges.push({
+            from: prophecyId,
+            to: events[eventIndex].id,
+            type: 'FULFILLED_BY',
+            label: 'fulfilled by'
+          });
+        }
+      });
+    }
+
+    return { nodes, edges };
+  }, [events, patterns, prophecies]);
 
   const { data: influentialEvents } = useQuery({
     queryKey: ['influential-events'],
@@ -119,15 +232,31 @@ export default function GraphPage() {
             {stats && ` ${stats.total_events + stats.total_patterns + stats.total_prophecies} nodes with ${stats.total_relationships} relationships.`}
           </p>
         </div>
-        <button
-          onClick={handleSync}
-          disabled={showSync}
-          className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
-        >
-          <RefreshCw className={`w-4 h-4 ${showSync ? 'animate-spin' : ''}`} />
-          {showSync ? 'Syncing...' : 'Sync Graph'}
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setShowVisualization(!showVisualization)}
+            className="flex items-center gap-2 bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors"
+          >
+            <Network className="w-4 h-4" />
+            {showVisualization ? 'Hide' : 'Show'} Network
+          </button>
+          <button
+            onClick={handleSync}
+            disabled={showSync}
+            className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
+          >
+            <RefreshCw className={`w-4 h-4 ${showSync ? 'animate-spin' : ''}`} />
+            {showSync ? 'Syncing...' : 'Sync Graph'}
+          </button>
+        </div>
       </div>
+
+      {/* Network Visualization */}
+      {showVisualization && nodes.length > 0 && (
+        <div className="mb-8">
+          <VisNetwork nodes={nodes} edges={edges} />
+        </div>
+      )}
 
       {stats && (
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">

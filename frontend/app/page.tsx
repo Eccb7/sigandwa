@@ -11,6 +11,23 @@ import {
   CheckCircle2
 } from 'lucide-react';
 import { chronologyAPI, patternAPI, prophecyAPI, simulationAPI, graphAPI } from '@/lib/api';
+import {
+  BarChart,
+  Bar,
+  LineChart,
+  Line,
+  PieChart,
+  Pie,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  AreaChart,
+  Area
+} from 'recharts';
 
 function StatCard({ 
   title, 
@@ -113,6 +130,14 @@ export default function DashboardPage() {
     },
   });
 
+  const { data: events } = useQuery({
+    queryKey: ['all-events'],
+    queryFn: async () => {
+      const response = await chronologyAPI.getEvents();
+      return response.data;
+    },
+  });
+
   const { data: patterns, isLoading: loadingPatterns } = useQuery({
     queryKey: ['patterns'],
     queryFn: async () => {
@@ -147,6 +172,47 @@ export default function DashboardPage() {
 
   const isLoading = loadingChronology || loadingPatterns || loadingProphecies || loadingRisk || loadingGraph;
 
+  // Prepare data for charts
+  const eventsByEra = events?.reduce((acc: any, event: any) => {
+    acc[event.era] = (acc[event.era] || 0) + 1;
+    return acc;
+  }, {});
+
+  const eraChartData = eventsByEra ? Object.entries(eventsByEra).map(([era, count]) => ({
+    era: era.replace(/_/g, ' '),
+    count
+  })) : [];
+
+  const eventsByType = events?.reduce((acc: any, event: any) => {
+    acc[event.event_type] = (acc[event.event_type] || 0) + 1;
+    return acc;
+  }, {});
+
+  const typeChartData = eventsByType ? Object.entries(eventsByType).map(([type, count]) => ({
+    name: type,
+    value: count
+  })) : [];
+
+  const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4', '#14b8a6'];
+
+  // Timeline distribution
+  const timelineData = events?.reduce((acc: any[], event: any) => {
+    const century = Math.floor(event.year_start / 100) * 100;
+    const existing = acc.find(item => item.century === century);
+    if (existing) {
+      existing.events += 1;
+    } else {
+      acc.push({ century, events: 1 });
+    }
+    return acc;
+  }, []).sort((a: any, b: any) => a.century - b.century) || [];
+
+  // Pattern instances data
+  const patternData = patterns?.map((pattern: any) => ({
+    name: pattern.name.substring(0, 20),
+    duration: pattern.typical_duration_years || 0
+  })) || [];
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -159,17 +225,17 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="border-b border-slate-200 pb-5">
-        <h1 className="text-3xl font-bold leading-tight text-slate-900">
+    <div className="space-y-4 sm:space-y-6">
+      <div className="border-b border-slate-200 pb-4 sm:pb-5">
+        <h1 className="text-2xl sm:text-3xl font-bold leading-tight text-slate-900">
           Dashboard
         </h1>
-        <p className="mt-2 text-sm text-slate-600">
+        <p className="mt-2 text-xs sm:text-sm text-slate-600">
           Biblical Cliodynamics Analysis System
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 sm:gap-5">
         <StatCard
           title="Historical Events"
           value={chronologyStats?.total_events || 0}
@@ -203,21 +269,162 @@ export default function DashboardPage() {
         />
       )}
 
-      <div className="bg-white shadow rounded-lg p-6">
-        <h3 className="text-lg font-medium text-slate-900 mb-4">
+      {/* Recharts Visualizations */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+        {/* Events by Era */}
+        <div className="bg-white shadow rounded-lg p-4 sm:p-6">
+          <h3 className="text-base sm:text-lg font-medium text-slate-900 mb-3 sm:mb-4">
+            Events by Era
+          </h3>
+          <div className="w-full overflow-x-auto">
+            <ResponsiveContainer width="100%" height={250} minWidth={300}>
+              <BarChart data={eraChartData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                <XAxis 
+                  dataKey="era" 
+                  angle={-45} 
+                  textAnchor="end" 
+                  height={100}
+                  tick={{ fontSize: 9 }}
+                />
+                <YAxis tick={{ fontSize: 10 }} />
+                <Tooltip 
+                  contentStyle={{ 
+                    backgroundColor: '#fff', 
+                    border: '1px solid #e2e8f0',
+                    borderRadius: '8px',
+                    fontSize: '12px'
+                  }}
+                />
+                <Bar dataKey="count" fill="#3b82f6" radius={[8, 8, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* Events by Type */}
+        <div className="bg-white shadow rounded-lg p-4 sm:p-6">
+          <h3 className="text-base sm:text-lg font-medium text-slate-900 mb-3 sm:mb-4">
+            Event Types Distribution
+          </h3>
+          <ResponsiveContainer width="100%" height={250}>
+            <PieChart>
+              <Pie
+                data={typeChartData}
+                cx="50%"
+                cy="50%"
+                labelLine={false}
+                label={(entry) => entry.name}
+                outerRadius={70}
+                fill="#8884d8"
+                dataKey="value"
+              >
+                {typeChartData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip contentStyle={{ fontSize: '12px' }} />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Timeline Distribution */}
+        <div className="bg-white shadow rounded-lg p-4 sm:p-6">
+          <h3 className="text-base sm:text-lg font-medium text-slate-900 mb-3 sm:mb-4">
+            Historical Timeline Distribution
+          </h3>
+          <div className="w-full overflow-x-auto">
+            <ResponsiveContainer width="100%" height={250} minWidth={300}>
+              <AreaChart data={timelineData}>
+                <defs>
+                  <linearGradient id="colorEvents" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8}/>
+                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                <XAxis 
+                  dataKey="century" 
+                  tickFormatter={(value) => value < 0 ? `${Math.abs(value)} BC` : `${value} AD`}
+                  tick={{ fontSize: 9 }}
+                />
+                <YAxis tick={{ fontSize: 10 }} />
+                <Tooltip 
+                  labelFormatter={(value) => value < 0 ? `${Math.abs(value)} BC` : `${value} AD`}
+                  contentStyle={{ 
+                    backgroundColor: '#fff', 
+                    border: '1px solid #e2e8f0',
+                    borderRadius: '8px',
+                    fontSize: '12px'
+                  }}
+                />
+                <Area 
+                  type="monotone" 
+                  dataKey="events" 
+                  stroke="#3b82f6" 
+                  fillOpacity={1} 
+                  fill="url(#colorEvents)" 
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* Pattern Analysis */}
+        <div className="bg-white shadow rounded-lg p-4 sm:p-6">
+          <h3 className="text-base sm:text-lg font-medium text-slate-900 mb-3 sm:mb-4">
+            Pattern Duration Analysis
+          </h3>
+          <div className="w-full overflow-x-auto">
+            <ResponsiveContainer width="100%" height={250} minWidth={300}>
+              <LineChart data={patternData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                <XAxis 
+                  dataKey="name" 
+                  angle={-45} 
+                  textAnchor="end" 
+                  height={100}
+                  tick={{ fontSize: 9 }}
+                />
+                <YAxis tick={{ fontSize: 10 }} />
+                <Tooltip 
+                  contentStyle={{ 
+                    backgroundColor: '#fff', 
+                    border: '1px solid #e2e8f0',
+                    borderRadius: '8px',
+                    fontSize: '12px'
+                  }}
+                />
+                <Legend wrapperStyle={{ fontSize: '12px' }} />
+                <Line 
+                  type="monotone" 
+                  dataKey="duration" 
+                  stroke="#10b981" 
+                  strokeWidth={2}
+                  dot={{ fill: '#10b981', r: 3 }}
+                  name="Duration (years)"
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-white shadow rounded-lg p-4 sm:p-6">
+        <h3 className="text-base sm:text-lg font-medium text-slate-900 mb-3 sm:mb-4">
           System Status
         </h3>
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-slate-600">PostgreSQL Database</span>
+            <span className="text-xs sm:text-sm text-slate-600">PostgreSQL Database</span>
             <CheckCircle2 className="h-5 w-5 text-green-500" />
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-sm text-slate-600">Neo4j Graph Database</span>
+            <span className="text-xs sm:text-sm text-slate-600">Neo4j Graph Database</span>
             <CheckCircle2 className="h-5 w-5 text-green-500" />
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-sm text-slate-600">FastAPI Backend</span>
+            <span className="text-xs sm:text-sm text-slate-600">FastAPI Backend</span>
             <CheckCircle2 className="h-5 w-5 text-green-500" />
           </div>
         </div>
