@@ -93,6 +93,7 @@ class ChronologyEngine:
 
         if include_uncertain:
             # Also include events where uncertainty bounds overlap with range
+            # Use union_all and distinct() to avoid JSON equality issues
             uncertain_query = self.db.query(ChronologyEvent).filter(
                 or_(
                     and_(
@@ -107,7 +108,16 @@ class ChronologyEngine:
                     ),
                 )
             )
-            return base_query.union(uncertain_query).all()
+            # Get IDs from both queries and fetch unique events
+            base_ids = {e.id for e in base_query.all()}
+            uncertain_ids = {e.id for e in uncertain_query.all()}
+            all_ids = base_ids | uncertain_ids
+            
+            if all_ids:
+                return self.db.query(ChronologyEvent).filter(
+                    ChronologyEvent.id.in_(all_ids)
+                ).order_by(ChronologyEvent.year_start).all()
+            return []
 
         return base_query.all()
 

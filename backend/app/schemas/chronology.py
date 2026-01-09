@@ -24,7 +24,7 @@ class ChronologyEventBase(BaseModel):
     event_type: EventType = Field(..., description="Primary event classification")
     biblical_source: Optional[str] = Field(None, description="Biblical reference (e.g., Genesis 7)")
     historical_source: Optional[str] = Field(None, description="Historical source references")
-    metadata: Optional[Dict[str, Any]] = Field(None, description="Additional structured data")
+    extra_data: Optional[Dict[str, Any]] = Field(None, description="Additional structured data")
 
 
 class ChronologyEventCreate(ChronologyEventBase):
