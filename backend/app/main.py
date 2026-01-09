@@ -9,6 +9,7 @@ from contextlib import asynccontextmanager
 
 from app.config import settings
 from app.api.routes import chronology, events, patterns, prophecies, simulation, graph
+from app.llm.api import router as llm_router
 
 
 @asynccontextmanager
@@ -24,7 +25,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.VERSION,
-    description="Biblical Cliodynamic Analysis System",
+    description="Biblical Cliodynamic Analysis System with Local LLM",
     lifespan=lifespan,
 )
 
@@ -44,6 +45,7 @@ app.include_router(patterns.router, prefix="/api/v1/patterns", tags=["patterns"]
 app.include_router(prophecies.router, prefix="/api/v1/prophecies", tags=["prophecies"])
 app.include_router(simulation.router, prefix="/api/v1/simulation", tags=["simulation"])
 app.include_router(graph.router, prefix="/api/v1/graph", tags=["graph"])
+app.include_router(llm_router)
 
 
 @app.get("/")
@@ -52,7 +54,8 @@ async def root():
     return {
         "name": settings.PROJECT_NAME,
         "version": settings.VERSION,
-        "description": "Biblical Cliodynamic Analysis System",
+        "description": "Biblical Cliodynamic Analysis System with Local LLM",
+        "features": ["chronology", "patterns", "prophecy", "simulation", "graph", "llm"],
         "docs": "/docs",
     }
 
