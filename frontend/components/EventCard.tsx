@@ -72,12 +72,12 @@ export default function EventCard({ event, onClick, detailed = false }: EventCar
         {/* Metadata Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           {/* Biblical Source */}
-          {event.biblical_source && (
+          {(event.biblical_source || event.extra_data?.biblical_source) && (
             <div className="flex items-start gap-2">
               <BookOpen className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
               <div>
                 <div className="text-xs font-semibold text-slate-500 uppercase">Biblical Reference</div>
-                <div className="text-sm text-slate-700">{event.biblical_source}</div>
+                <div className="text-sm text-slate-700">{event.biblical_source || event.extra_data?.biblical_source}</div>
               </div>
             </div>
           )}
@@ -103,7 +103,7 @@ export default function EventCard({ event, onClick, detailed = false }: EventCar
           )}
 
           {/* Uncertainty */}
-          {(event.year_start_min || event.year_start_max) && (
+          {(event.year_start_min || event.year_start_max || event.uncertainty_range) && (
             <div className="flex items-start gap-2">
               <Clock className="w-5 h-5 text-orange-600 flex-shrink-0 mt-0.5" />
               <div>
@@ -112,6 +112,7 @@ export default function EventCard({ event, onClick, detailed = false }: EventCar
                   {event.year_start_min && `${Math.abs(event.year_start_min)} ${event.year_start_min < 0 ? 'BC' : 'AD'}`}
                   {event.year_start_min && event.year_start_max && ' - '}
                   {event.year_start_max && `${Math.abs(event.year_start_max)} ${event.year_start_max < 0 ? 'BC' : 'AD'}`}
+                  {!event.year_start_min && !event.year_start_max && event.uncertainty_range && `±${event.uncertainty_range} years`}
                 </div>
               </div>
             </div>

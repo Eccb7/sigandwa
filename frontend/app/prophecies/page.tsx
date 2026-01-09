@@ -3,8 +3,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { prophecyAPI, graphAPI } from '@/lib/api';
 import { Prophecy, ProphecyFulfillment } from '@/lib/types';
-import { BookOpen, Calendar, User, Globe, CheckCircle, Clock, Network } from 'lucide-react';
+import { BookOpen, Calendar, User, Globe, CheckCircle, Clock, Network, BookOpenText, Scroll } from 'lucide-react';
 import { useState } from 'react';
+import ProphecyTimeline from '@/components/ProphecyTimeline';
+import DanielBeasts from '@/components/DanielBeasts';
 
 interface ProphecyCardProps {
   prophecy: Prophecy;
@@ -246,6 +248,7 @@ function ProphecyDetail({ prophecy, onClose }: ProphecyDetailProps) {
 
 export default function PropheciesPage() {
   const [selectedProphecy, setSelectedProphecy] = useState<Prophecy | null>(null);
+  const [activeTab, setActiveTab] = useState<'overview' | 'timeline' | 'beasts' | 'database'>('overview');
   
   const { data: prophecies, isLoading, error } = useQuery({
     queryKey: ['prophecies'],
@@ -268,7 +271,7 @@ export default function PropheciesPage() {
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
-          <p className="text-slate-600">Loading prophecies...</p>
+          <p className="text-slate-600">Loading Biblical prophecy interpretation...</p>
         </div>
       </div>
     );
@@ -286,43 +289,232 @@ export default function PropheciesPage() {
 
   return (
     <div className="max-w-7xl mx-auto">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-slate-900 mb-2">Prophecy Fulfillment Tracker</h1>
-        <p className="text-slate-600">
-          Biblical prophecies and their historical fulfillments. 
-          {prophecies && ` Tracking ${prophecies.length} prophecies across history.`}
-        </p>
+      {/* Hero Header */}
+      <div className="bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-600 text-white rounded-lg shadow-lg p-8 mb-8">
+        <div className="flex items-center mb-4">
+          <Scroll className="w-12 h-12 mr-4" />
+          <div>
+            <h1 className="text-4xl font-bold mb-2">Biblical Prophecy: The Historicist Interpretation</h1>
+            <p className="text-lg text-purple-100">
+              The Definitive Guide to Understanding Fulfilled and Future Prophecy
+            </p>
+          </div>
+        </div>
+        <div className="bg-white bg-opacity-10 rounded-lg p-4 mt-4">
+          <p className="text-sm text-purple-100 leading-relaxed">
+            <strong>Based on:</strong> Gems from Daniel by Robert J. Wieland & Donald K. Short, and Gems from Revelation - 
+            The historicist school of prophetic interpretation used by the Protestant Reformers, recognizing fulfilled prophecies 
+            throughout history from Daniel's time to the present day.
+          </p>
+        </div>
       </div>
 
-      {timeline && (
-        <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg p-6 mb-8 border border-purple-200">
-          <h2 className="text-xl font-semibold text-slate-900 mb-4">Timeline Summary</h2>
-          <div className="grid md:grid-cols-3 gap-4">
-            <div className="bg-white rounded-lg p-4">
-              <p className="text-slate-600 text-sm">Total Prophecies</p>
-              <p className="text-2xl font-bold text-purple-600">{timeline.total_prophecies}</p>
-            </div>
-            <div className="bg-white rounded-lg p-4">
-              <p className="text-slate-600 text-sm">Total Fulfillments</p>
-              <p className="text-2xl font-bold text-green-600">{timeline.total_fulfillments}</p>
-            </div>
-            <div className="bg-white rounded-lg p-4">
-              <p className="text-slate-600 text-sm">Time Span</p>
-              <p className="text-2xl font-bold text-blue-600">{timeline.time_span_years} years</p>
+      {/* Navigation Tabs */}
+      <div className="mb-8">
+        <div className="border-b border-slate-200">
+          <nav className="flex gap-6">
+            <button
+              onClick={() => setActiveTab('overview')}
+              className={`pb-4 px-2 font-semibold text-sm transition-colors border-b-2 ${
+                activeTab === 'overview'
+                  ? 'border-purple-600 text-purple-600'
+                  : 'border-transparent text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <BookOpenText className="w-5 h-5" />
+                <span>Overview & Principles</span>
+              </div>
+            </button>
+            <button
+              onClick={() => setActiveTab('timeline')}
+              className={`pb-4 px-2 font-semibold text-sm transition-colors border-b-2 ${
+                activeTab === 'timeline'
+                  ? 'border-purple-600 text-purple-600'
+                  : 'border-transparent text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <Clock className="w-5 h-5" />
+                <span>Prophetic Timeline</span>
+              </div>
+            </button>
+            <button
+              onClick={() => setActiveTab('beasts')}
+              className={`pb-4 px-2 font-semibold text-sm transition-colors border-b-2 ${
+                activeTab === 'beasts'
+                  ? 'border-purple-600 text-purple-600'
+                  : 'border-transparent text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <Globe className="w-5 h-5" />
+                <span>Daniel's Kingdoms</span>
+              </div>
+            </button>
+            <button
+              onClick={() => setActiveTab('database')}
+              className={`pb-4 px-2 font-semibold text-sm transition-colors border-b-2 ${
+                activeTab === 'database'
+                  ? 'border-purple-600 text-purple-600'
+                  : 'border-transparent text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <BookOpen className="w-5 h-5" />
+                <span>Prophecy Database</span>
+              </div>
+            </button>
+          </nav>
+        </div>
+      </div>
+
+      {/* Tab Content */}
+      {activeTab === 'overview' && (
+        <div className="space-y-8">
+          {/* Introduction */}
+          <div className="bg-white rounded-lg shadow-md p-8">
+            <h2 className="text-2xl font-bold text-slate-900 mb-4">The Historicist Method of Prophetic Interpretation</h2>
+            <div className="prose max-w-none text-slate-700 space-y-4">
+              <p className="text-lg leading-relaxed">
+                The historicist approach to Bible prophecy sees prophetic fulfillment as a <strong>continuous historical process</strong>, 
+                spanning from the prophet's time through the present and into the future. This method was championed by the 
+                Protestant Reformers including Martin Luther, John Calvin, and later by William Miller and the Advent movement.
+              </p>
+              
+              <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
+                <h3 className="text-lg font-bold text-blue-900 mb-2">Core Principles</h3>
+                <ul className="space-y-2 text-slate-700">
+                  <li className="flex items-start">
+                    <span className="text-blue-500 mr-2 mt-1">1.</span>
+                    <span><strong>Year-Day Principle:</strong> One prophetic day equals one literal year (Numbers 14:34, Ezekiel 4:6)</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-blue-500 mr-2 mt-1">2.</span>
+                    <span><strong>Continuous Fulfillment:</strong> Prophecies unfold throughout history, not just at the end times</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-blue-500 mr-2 mt-1">3.</span>
+                    <span><strong>Symbolic Interpretation:</strong> Beasts represent kingdoms, horns represent powers, women represent churches</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-blue-500 mr-2 mt-1">4.</span>
+                    <span><strong>Historical Validation:</strong> Fulfilled prophecies confirm the divine inspiration of Scripture</span>
+                  </li>
+                </ul>
+              </div>
+
+              <h3 className="text-xl font-bold text-slate-900 mt-8 mb-3">Key Prophetic Periods</h3>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="bg-red-50 border border-red-200 rounded-lg p-5">
+                  <h4 className="font-bold text-red-900 mb-2">1260 Days/Years</h4>
+                  <p className="text-sm text-slate-700 mb-3">
+                    Mentioned <strong>seven times</strong> in Daniel and Revelation (Daniel 7:25, 12:7; Revelation 11:2-3, 12:6, 12:14, 13:5).
+                    Historicists identify this as 538-1798 AD - the period of papal supremacy from the fall of the Ostrogoths to 
+                    the capture of Pope Pius VI by French General Berthier.
+                  </p>
+                  <div className="bg-white rounded p-3 text-xs">
+                    <strong>Biblical forms:</strong> "time, times, and half a time" (3.5 years), "forty-two months", "1260 days"
+                  </div>
+                </div>
+
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-5">
+                  <h4 className="font-bold text-blue-900 mb-2">2300 Days/Years</h4>
+                  <p className="text-sm text-slate-700 mb-3">
+                    From Daniel 8:14: "Unto two thousand and three hundred days; then shall the sanctuary be cleansed."
+                    Starting from the decree to rebuild Jerusalem (457 BC), this period extends to 1844 AD, marking the 
+                    beginning of the investigative judgment in heaven's sanctuary.
+                  </p>
+                  <div className="bg-white rounded p-3 text-xs">
+                    <strong>William Miller:</strong> Sparked the Second Advent Movement by calculating this timeline
+                  </div>
+                </div>
+
+                <div className="bg-purple-50 border border-purple-200 rounded-lg p-5">
+                  <h4 className="font-bold text-purple-900 mb-2">Seventy Weeks (490 Years)</h4>
+                  <p className="text-sm text-slate-700 mb-3">
+                    Daniel 9:24-27 prophesies 70 weeks (490 years) determined for Israel. The 69 weeks (483 years) 
+                    reach to Messiah the Prince. Jesus began His ministry in 27 AD and was crucified in 31 AD, 
+                    exactly fulfilling this timeline.
+                  </p>
+                  <div className="bg-white rounded p-3 text-xs">
+                    <strong>Fulfillment:</strong> 457 BC (decree) + 483 years = 27 AD (Jesus' baptism)
+                  </div>
+                </div>
+
+                <div className="bg-green-50 border border-green-200 rounded-lg p-5">
+                  <h4 className="font-bold text-green-900 mb-2">1290 & 1335 Days/Years</h4>
+                  <p className="text-sm text-slate-700 mb-3">
+                    Daniel 12:11-12 mentions two additional time periods. The 1290 days may extend from 508 AD 
+                    (Clovis' conversion establishing papal infrastructure) to 1798 AD. The 1335 days reach approximately 
+                    to 1843-1844, the time of great prophetic awakening.
+                  </p>
+                  <div className="bg-white rounded p-3 text-xs">
+                    <strong>Note:</strong> "Blessed is he that waiteth, and cometh to the 1335 days" (Daniel 12:12)
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
+
+          {/* Timeline Summary if available */}
+          {timeline && (
+            <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg p-6 border border-purple-200">
+              <h2 className="text-xl font-semibold text-slate-900 mb-4">System Prophecy Statistics</h2>
+              <div className="grid md:grid-cols-3 gap-4">
+                <div className="bg-white rounded-lg p-4 shadow">
+                  <p className="text-slate-600 text-sm">Total Prophecies Tracked</p>
+                  <p className="text-3xl font-bold text-purple-600">{timeline.total_prophecies}</p>
+                </div>
+                <div className="bg-white rounded-lg p-4 shadow">
+                  <p className="text-slate-600 text-sm">Historical Fulfillments</p>
+                  <p className="text-3xl font-bold text-green-600">{timeline.total_fulfillments}</p>
+                </div>
+                <div className="bg-white rounded-lg p-4 shadow">
+                  <p className="text-slate-600 text-sm">Time Span Covered</p>
+                  <p className="text-3xl font-bold text-blue-600">{timeline.time_span_years} years</p>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {prophecies && prophecies.map((prophecy: Prophecy) => (
-          <ProphecyCard 
-            key={prophecy.id} 
-            prophecy={prophecy}
-            onClick={() => setSelectedProphecy(prophecy)}
-          />
-        ))}
-      </div>
+      {activeTab === 'timeline' && <ProphecyTimeline />}
+      
+      {activeTab === 'beasts' && <DanielBeasts />}
+      
+      {activeTab === 'database' && (
+        <div className="space-y-6">
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <h2 className="text-2xl font-bold text-slate-900 mb-2">Prophecy Database</h2>
+            <p className="text-slate-600 mb-6">
+              Biblical prophecies tracked in the system with their historical fulfillments. 
+              {prophecies && ` Currently tracking ${prophecies.length} prophecies.`}
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {prophecies && prophecies.map((prophecy: Prophecy) => (
+              <ProphecyCard 
+                key={prophecy.id} 
+                prophecy={prophecy}
+                onClick={() => setSelectedProphecy(prophecy)}
+              />
+            ))}
+          </div>
+
+          {(!prophecies || prophecies.length === 0) && (
+            <div className="bg-slate-50 rounded-lg p-12 text-center">
+              <BookOpen className="w-16 h-16 text-slate-400 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-slate-700 mb-2">No prophecies in database yet</h3>
+              <p className="text-slate-500">
+                Prophecy data will be imported from the prophecy library in the backend.
+              </p>
+            </div>
+          )}
+        </div>
+      )}
 
       {selectedProphecy && (
         <ProphecyDetail 
