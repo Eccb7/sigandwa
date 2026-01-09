@@ -3,58 +3,15 @@
 import { useQuery } from '@tanstack/react-query';
 import { chronologyAPI } from '@/lib/api';
 import type { ChronologyEvent } from '@/lib/types';
-import { Calendar, ChevronRight, Filter, Search } from 'lucide-react';
+import { ChevronRight, Filter, Search } from 'lucide-react';
 import { useState, useMemo } from 'react';
 import dynamic from 'next/dynamic';
+import EventCard from '@/components/EventCard';
 
 const D3Timeline = dynamic(() => import('@/components/D3Timeline'), {
   ssr: false,
   loading: () => <div className="h-[600px] bg-slate-100 animate-pulse rounded-lg"></div>
 });
-
-function TimelineEvent({ event }: { event: ChronologyEvent }) {
-  const yearDisplay = event.year_end 
-    ? `${event.year_start} to ${event.year_end}`
-    : event.year_start;
-
-  return (
-    <div className="relative pb-8">
-      <span className="absolute top-5 left-5 -ml-px h-full w-0.5 bg-slate-200" aria-hidden="true" />
-      <div className="relative flex items-start space-x-3">
-        <div>
-          <div className="relative px-1">
-            <div className="h-8 w-8 bg-blue-500 rounded-full ring-8 ring-white flex items-center justify-center">
-              <Calendar className="h-5 w-5 text-white" />
-            </div>
-          </div>
-        </div>
-        <div className="min-w-0 flex-1 py-0">
-          <div className="text-md text-slate-500">
-            <span className="font-medium text-slate-900">{event.name}</span>
-            {' • '}
-            <span className="whitespace-nowrap">{yearDisplay}</span>
-          </div>
-          <div className="mt-2 text-sm text-slate-700">
-            <p>{event.description}</p>
-          </div>
-          <div className="mt-2 flex items-center space-x-2">
-            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-800">
-              {event.era}
-            </span>
-            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-              {event.event_type}
-            </span>
-            {event.is_pivotal && (
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                Pivotal
-              </span>
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 export default function TimelinePage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -244,14 +201,10 @@ export default function TimelinePage() {
             {filteredEvents.length} {filteredEvents.length === 1 ? 'event' : 'events'}
           </span>
         </div>
-        <div className="flow-root">
-          <ul className="-mb-8">
-            {filteredEvents.map((event, idx) => (
-              <li key={event.id}>
-                <TimelineEvent event={event} />
-              </li>
-            ))}
-          </ul>
+        <div className="space-y-4">
+          {filteredEvents.map((event) => (
+            <EventCard key={event.id} event={event} />
+          ))}
           {filteredEvents.length === 0 && (
             <div className="text-center py-12 text-slate-500">
               No events match your filters. Try adjusting your search criteria.
