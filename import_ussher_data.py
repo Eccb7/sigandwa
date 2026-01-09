@@ -14,7 +14,14 @@ sys.path.insert(0, str(Path(__file__).parent / "backend"))
 from sqlalchemy.orm import Session
 from app.database import engine, get_db
 from app.models.chronology import ChronologyEvent, EventType, ChronologyEra
-from data.seed.ussher_annals_seed import USSHER_ANNALS_EVENTS
+
+# Import extended Annals data (7,302 events) instead of limited seed (42 events)
+try:
+    from data.seed.ussher_annals_extended import USSHER_ANNALS_EVENTS
+    print("✅ Using extended Annals data (7,302 events)")
+except ImportError:
+    from data.seed.ussher_annals_seed import USSHER_ANNALS_EVENTS
+    print("⚠️  Using limited seed data (42 events) - run parse_ussher_annals.py to generate extended data")
 
 
 def import_events():
