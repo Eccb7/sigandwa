@@ -60,13 +60,54 @@ class ChronologyQuestionRequest(BaseModel):
 
 
 @router.post("/chat", response_model=ChatResponse)
-async def chat(request: ChatRequest):
-    """General chat interface with Biblical knowledge"""
+async def chat(request: ChatRequest, db: Session = Depends(get_db)):
+    """General chat interface with Biblical knowledge + RAG"""
     try:
+        from ..models.chronology import ChronologyEvent
+        from sqlalchemy import or_, func
+        
         manager = get_model_manager()
         
-        # Build conversation with system prompt
+        # RAG: Search database for relevant context
+        relevant_context = ""
+        keywords = request.message.lower().split()
+        
+        # Search for relevant events
+        query = db.query(ChronologyEvent)
+        for keyword in keywords[:5]:
+            if len(keyword) > 3:  # Skip short words
+                query = query.filter(
+                    or_(
+                        func.lower(ChronologyEvent.name).contains(keyword),
+                        func.lower(ChronologyEvent.description).contains(keyword),
+                        func.lower(ChronologyEvent.biblical_source).contains(keyword)
+                    )
+                )
+        
+        relevant_events = query.limit(5).all()
+        
+        # Build context from relevant events
+        if relevant_events:
+            context_parts = ["**Relevant Historical Events from Ussher's Chronology:**\n"]
+            for event in relevant_events:
+                year_display = f"{abs(event.year_start)} {'BC' if event.year_start < 0 else 'AD'}"
+                context_parts.append(f"- **{year_display}**: {event.name}")
+                if event.description:
+                    context_parts.append(f"  {event.description[:200]}...")
+                if event.biblical_source:
+                    context_parts.append(f"  Source: {event.biblical_source}")
+            relevant_context = "\n".join(context_parts)
+        
+        # Build conversation with system prompt + RAG context
         messages = [{"role": "system", "content": SYSTEM_PROMPT}]
+        
+        # Add RAG context if available
+        if relevant_context:
+            messages.append({
+                "role": "system", 
+                "content": f"{relevant_context}\n\nUse the above historical data to answer accurately."
+            })
+        
         messages.extend(request.conversation_history)
         messages.append({"role": "user", "content": request.message})
         
