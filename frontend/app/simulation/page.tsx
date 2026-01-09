@@ -2,96 +2,232 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { simulationAPI } from '@/lib/api';
-import { WorldIndicator } from '@/lib/types';
-import { TrendingUp, TrendingDown, AlertTriangle, DollarSign, Users, Home, Zap, Activity } from 'lucide-react';
-import { useState } from 'react';
+import { 
+  TrendingUp, 
+  TrendingDown, 
+  AlertTriangle, 
+  DollarSign, 
+  Users, 
+  Home, 
+  Zap, 
+  Activity, 
+  Shield, 
+  Swords,
+  ChevronLeft,
+  ChevronRight,
+  Maximize2,
+  Target,
+  BarChart3
+} from 'lucide-react';
+import { useState, useMemo } from 'react';
 
+// Category Icons
 function getCategoryIcon(category: string) {
   switch (category.toLowerCase()) {
     case 'economic': return DollarSign;
     case 'social': return Users;
     case 'political': return Home;
     case 'environmental': return Zap;
+    case 'military': return Swords;
+    case 'religious': return Shield;
     default: return Activity;
   }
 }
 
-function getTrendIcon(trend?: string) {
-  switch (trend) {
-    case 'increasing': return TrendingUp;
-    case 'decreasing': return TrendingDown;
-    default: return Activity;
-  }
+// Number formatting for large values
+function formatLargeNumber(num: number): string {
+  if (num >= 1e12) return `${(num / 1e12).toFixed(2)}T`;
+  if (num >= 1e9) return `${(num / 1e9).toFixed(2)}B`;
+  if (num >= 1e6) return `${(num / 1e6).toFixed(2)}M`;
+  if (num >= 1e3) return `${(num / 1e3).toFixed(1)}K`;
+  return num.toFixed(1);
 }
 
-function getTrendColor(trend?: string) {
-  switch (trend) {
-    case 'increasing': return 'text-red-500';
-    case 'decreasing': return 'text-green-500';
-    default: return 'text-slate-500';
-  }
+// Severity color based on value
+function getSeverityColor(value: number, maxValue: number = 10): string {
+  const ratio = value / maxValue;
+  if (ratio >= 0.8) return 'text-red-600 bg-red-100 border-red-300';
+  if (ratio >= 0.6) return 'text-orange-600 bg-orange-100 border-orange-300';
+  if (ratio >= 0.4) return 'text-yellow-600 bg-yellow-100 border-yellow-300';
+  return 'text-green-600 bg-green-100 border-green-300';
 }
 
-interface IndicatorCardProps {
-  indicator: WorldIndicator;
+interface SlideIndicatorProps {
+  indicator: any;
+  isExpanded?: boolean;
 }
 
-function IndicatorCard({ indicator }: IndicatorCardProps) {
-  const Icon = getCategoryIcon(indicator.category);
-  const TrendIcon = getTrendIcon(indicator.trend);
-  const trendColor = getTrendColor(indicator.trend);
+function SlideIndicator({ indicator, isExpanded = false }: SlideIndicatorProps) {
+  const Icon = getCategoryIcon(indicator.name.includes('Christian') || indicator.name.includes('Religious') || indicator.name.includes('Secularization') || indicator.name.includes('Apostasy') || indicator.name.includes('Prophetic') ? 'religious' : 'social');
+  const formattedValue = indicator.value >= 100 ? formatLargeNumber(indicator.value) : indicator.value.toFixed(2);
+  const severityClass = indicator.value <= 10 ? getSeverityColor(indicator.value, 10) : 'text-slate-700 bg-slate-100 border-slate-300';
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 border border-slate-200">
+    <div className={`bg-white rounded-xl border-2 shadow-lg transition-all duration-300 ${isExpanded ? 'p-8' : 'p-6'} hover:shadow-2xl`}>
       <div className="flex items-start justify-between mb-4">
-        <div className="flex items-center">
-          <div className="bg-blue-100 rounded-lg p-3 mr-3">
-            <Icon className="w-5 h-5 text-blue-600" />
+        <div className="flex items-center gap-4">
+          <div className={`p-4 rounded-xl ${severityClass}`}>
+            <Icon className="w-8 h-8" />
           </div>
           <div>
-            <h3 className="text-sm font-medium text-slate-900">{indicator.name}</h3>
-            <span className="text-xs text-slate-500 capitalize">{indicator.category}</span>
+            <h3 className={`font-bold text-slate-900 ${isExpanded ? 'text-2xl' : 'text-lg'}`}>
+              {indicator.name}
+            </h3>
+            <p className="text-sm text-slate-500 mt-1">{indicator.description}</p>
           </div>
         </div>
-        <TrendIcon className={`w-5 h-5 ${trendColor}`} />
       </div>
       
-      <div className="mb-2">
-        <span className="text-2xl font-bold text-slate-900">{indicator.value}</span>
-        {indicator.unit && <span className="text-slate-600 ml-1">{indicator.unit}</span>}
+      <div className="flex items-baseline gap-3 mb-4">
+        <span className={`font-bold ${isExpanded ? 'text-5xl' : 'text-4xl'} text-slate-900`}>
+          {formattedValue}
+        </span>
+        {indicator.value <= 10 && (
+          <span className="text-lg text-slate-500">/ 10</span>
+        )}
       </div>
-      
-      <div className="flex items-center justify-between text-xs text-slate-500">
-        <span>Source: {indicator.source || 'Unknown'}</span>
-        <span>{indicator.last_updated ? new Date(indicator.last_updated).toLocaleDateString() : 'N/A'}</span>
+
+      <div className="flex items-center justify-between text-sm text-slate-600">
+        <span className="flex items-center gap-2">
+          <BarChart3 className="w-4 h-4" />
+          {new Date(indicator.timestamp).toLocaleDateString()}
+        </span>
+        {indicator.value <= 10 && (
+          <span className={`px-3 py-1 rounded-full font-semibold text-xs ${severityClass}`}>
+            {indicator.value >= 8 ? 'CRITICAL' : indicator.value >= 6 ? 'HIGH' : indicator.value >= 4 ? 'MODERATE' : 'LOW'}
+          </span>
+        )}
       </div>
     </div>
   );
 }
 
-interface RiskLevelProps {
-  level: string;
-  score: number;
+interface CategorySlideProps {
+  category: string;
+  indicators: any[];
+  onIndicatorClick: (indicator: any) => void;
 }
 
-function RiskLevel({ level, score }: RiskLevelProps) {
-  const colors = {
-    'LOW': 'bg-green-100 text-green-800 border-green-300',
-    'MODERATE': 'bg-yellow-100 text-yellow-800 border-yellow-300',
-    'HIGH': 'bg-orange-100 text-orange-800 border-orange-300',
-    'CRITICAL': 'bg-red-100 text-red-800 border-red-300'
-  };
+function CategorySlide({ category, indicators, onIndicatorClick }: CategorySlideProps) {
+  const Icon = getCategoryIcon(category);
+  const avgValue = indicators.reduce((sum, ind) => sum + (ind.value <= 10 ? ind.value : 0), 0) / indicators.filter(ind => ind.value <= 10).length;
+  const severity = avgValue >= 7 ? 'CRITICAL' : avgValue >= 5 ? 'HIGH' : avgValue >= 3 ? 'MODERATE' : 'LOW';
+  const severityColor = avgValue >= 7 ? 'bg-red-600' : avgValue >= 5 ? 'bg-orange-600' : avgValue >= 3 ? 'bg-yellow-600' : 'bg-green-600';
 
   return (
-    <div className={`rounded-lg p-4 border-2 ${colors[level as keyof typeof colors] || colors.MODERATE}`}>
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm font-medium">Risk Level</p>
-          <p className="text-2xl font-bold">{level}</p>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 p-8">
+      {/* Category Header */}
+      <div className="max-w-7xl mx-auto mb-12">
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-6">
+            <div className={`p-6 rounded-2xl ${severityColor} shadow-2xl`}>
+              <Icon className="w-16 h-16 text-white" />
+            </div>
+            <div>
+              <h1 className="text-5xl font-bold text-slate-900 mb-2 capitalize">
+                {category} Indicators
+              </h1>
+              <p className="text-xl text-slate-600">
+                {indicators.length} key metrics &bull; Average Severity: {severity}
+              </p>
+            </div>
+          </div>
+          <div className={`px-8 py-4 rounded-2xl ${severityColor} text-white shadow-xl`}>
+            <div className="text-sm font-semibold uppercase tracking-wider mb-1">Avg Score</div>
+            <div className="text-4xl font-bold">{avgValue.toFixed(1)}</div>
+          </div>
         </div>
-        <div className="text-right">
-          <p className="text-sm font-medium">Score</p>
-          <p className="text-2xl font-bold">{(score * 100).toFixed(1)}%</p>
+      </div>
+
+      {/* Indicators Grid */}
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {indicators.map((indicator, idx) => (
+          <div key={idx} onClick={() => onIndicatorClick(indicator)} className="cursor-pointer">
+            <SlideIndicator indicator={indicator} />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function RiskAssessmentSlide({ riskData }: { riskData: any }) {
+  const riskLevel = riskData.risk_level.toUpperCase();
+  const riskScore = (riskData.overall_risk_score * 100).toFixed(1);
+  const riskColor = riskLevel === 'CRITICAL' ? 'bg-red-600' : riskLevel === 'HIGH' ? 'bg-orange-600' : riskLevel === 'MODERATE' ? 'bg-yellow-600' : 'bg-green-600';
+  
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-900 p-8">
+      <div className="max-w-7xl mx-auto">
+        {/* Main Risk Display */}
+        <div className="text-center mb-16">
+          <h1 className="text-6xl font-bold text-white mb-8">
+            Civilizational Risk Assessment
+          </h1>
+          <div className={`inline-block px-16 py-12 rounded-3xl ${riskColor} shadow-2xl`}>
+            <div className="text-3xl font-bold text-white uppercase tracking-wider mb-4">
+              {riskLevel} RISK
+            </div>
+            <div className="text-8xl font-bold text-white mb-4">
+              {riskScore}%
+            </div>
+            <div className="text-xl text-white opacity-90">
+              Overall Risk Score
+            </div>
+          </div>
+        </div>
+
+        {/* Top Pattern Risks */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+          {riskData.top_risks.slice(0, 3).map((risk: any, idx: number) => (
+            <div key={idx} className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border-2 border-white/20">
+              <div className="flex items-center justify-between mb-6">
+                <AlertTriangle className="w-12 h-12 text-yellow-400" />
+                <span className="text-5xl font-bold text-white opacity-50">
+                  #{idx + 1}
+                </span>
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-4">
+                {risk.pattern_name}
+              </h3>
+              <div className="space-y-3">
+                <div className="flex justify-between items-center">
+                  <span className="text-white/70">Match Score</span>
+                  <span className="text-2xl font-bold text-white">{(risk.match_score * 100).toFixed(0)}%</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-white/70">Weighted Risk</span>
+                  <span className="text-2xl font-bold text-yellow-400">{(risk.weighted_risk * 100).toFixed(0)}%</span>
+                </div>
+              </div>
+              <div className="mt-6">
+                <div className="text-white/70 text-sm mb-2">Matched Preconditions:</div>
+                <div className="flex flex-wrap gap-2">
+                  {risk.matched_preconditions.map((cond: string, i: number) => (
+                    <span key={i} className="bg-yellow-500/20 text-yellow-200 px-3 py-1 rounded-full text-xs font-medium border border-yellow-500/30">
+                      {cond.replace(/_/g, ' ')}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Stats */}
+        <div className="grid grid-cols-3 gap-6">
+          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 text-center">
+            <div className="text-4xl font-bold text-white mb-2">{riskData.total_patterns_assessed}</div>
+            <div className="text-white/70">Patterns Assessed</div>
+          </div>
+          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 text-center">
+            <div className="text-4xl font-bold text-white mb-2">{riskData.patterns_with_matches}</div>
+            <div className="text-white/70">Patterns with Matches</div>
+          </div>
+          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 text-center">
+            <div className="text-4xl font-bold text-white mb-2">{riskData.top_risks.length}</div>
+            <div className="text-white/70">High Risk Patterns</div>
+          </div>
         </div>
       </div>
     </div>
@@ -99,9 +235,10 @@ function RiskLevel({ level, score }: RiskLevelProps) {
 }
 
 export default function SimulationPage() {
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [selectedIndicator, setSelectedIndicator] = useState<any>(null);
 
-  const { data: indicators, isLoading: indicatorsLoading } = useQuery({
+  const { data: indicatorsData, isLoading: indicatorsLoading, error: indicatorsError } = useQuery({
     queryKey: ['world-indicators'],
     queryFn: async () => {
       const response = await simulationAPI.getIndicators();
@@ -109,7 +246,7 @@ export default function SimulationPage() {
     },
   });
 
-  const { data: riskAssessment, isLoading: riskLoading } = useQuery({
+  const { data: riskData, isLoading: riskLoading, error: riskError } = useQuery({
     queryKey: ['risk-assessment'],
     queryFn: async () => {
       const response = await simulationAPI.getRiskAssessment();
@@ -117,132 +254,150 @@ export default function SimulationPage() {
     },
   });
 
-  const filteredIndicators = indicators?.filter((ind: WorldIndicator) => 
-    selectedCategory === 'all' || ind.category === selectedCategory
-  );
+  // Organize indicators by category
+  const categorizedIndicators = useMemo(() => {
+    if (!indicatorsData?.by_category) return [];
+    return Object.entries(indicatorsData.by_category).map(([category, indicators]) => ({
+      category,
+      indicators: indicators as any[]
+    }));
+  }, [indicatorsData]);
 
-  const uniqueCategories = Array.from(new Set(indicators?.map((ind: WorldIndicator) => ind.category) || [])) as string[];
-  const categories: string[] = ['all', ...uniqueCategories];
+  const totalSlides = categorizedIndicators.length + (riskData ? 1 : 0);
+
+  const goToNextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % totalSlides);
+    setSelectedIndicator(null);
+  };
+
+  const goToPrevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
+    setSelectedIndicator(null);
+  };
 
   if (indicatorsLoading || riskLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-900 to-slate-800">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-slate-600">Loading simulation data...</p>
+          <div className="animate-spin rounded-full h-20 w-20 border-t-4 border-b-4 border-blue-500 mx-auto mb-6"></div>
+          <p className="text-2xl text-white font-semibold">Loading World Simulation...</p>
+          <p className="text-slate-400 mt-2">Analyzing civilizational indicators</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (indicatorsError || riskError) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-red-900 to-slate-900">
+        <div className="text-center max-w-2xl px-8">
+          <AlertTriangle className="w-20 h-20 text-red-400 mx-auto mb-6" />
+          <h1 className="text-4xl font-bold text-white mb-4">Simulation Data Unavailable</h1>
+          <p className="text-xl text-slate-300 mb-6">
+            Unable to load world simulation data. The backend service may be unavailable.
+          </p>
+          <button 
+            onClick={() => window.location.reload()}
+            className="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold transition-colors"
+          >
+            Retry
+          </button>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-7xl mx-auto">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-slate-900 mb-2">World Simulation Dashboard</h1>
-        <p className="text-slate-600">
-          Real-time monitoring of global indicators and civilizational risk assessment.
-          {indicators && ` Tracking ${indicators.length} indicators across multiple categories.`}
-        </p>
+    <div className="relative min-h-screen bg-slate-50">
+      {/* Slide Content */}
+      <div className="relative">
+        {/* Risk Assessment Slide (First Slide) */}
+        {currentSlide === 0 && riskData && (
+          <RiskAssessmentSlide riskData={riskData} />
+        )}
+
+        {/* Category Slides */}
+        {currentSlide > 0 && categorizedIndicators[currentSlide - 1] && (
+          <CategorySlide 
+            category={categorizedIndicators[currentSlide - 1].category}
+            indicators={categorizedIndicators[currentSlide - 1].indicators}
+            onIndicatorClick={setSelectedIndicator}
+          />
+        )}
       </div>
 
-      {riskAssessment && (
-        <div className="mb-8">
-          <RiskLevel level={riskAssessment.risk_level} score={riskAssessment.overall_risk} />
-        </div>
-      )}
-
-      {riskAssessment && riskAssessment.pattern_assessments && riskAssessment.pattern_assessments.length > 0 && (
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8 border border-slate-200">
-          <h2 className="text-xl font-semibold text-slate-900 mb-4 flex items-center">
-            <AlertTriangle className="w-5 h-5 mr-2 text-orange-500" />
-            Pattern Risk Assessment
-          </h2>
-          <div className="space-y-3">
-            {riskAssessment.pattern_assessments.map((assessment: any, idx: number) => (
-              <div key={idx} className="bg-slate-50 rounded-lg p-4 border border-slate-200">
-                <div className="flex justify-between items-start mb-2">
-                  <div>
-                    <h3 className="font-semibold text-slate-900">{assessment.pattern_name}</h3>
-                    <p className="text-sm text-slate-600 mt-1">{assessment.assessment}</p>
-                  </div>
-                  <div className="flex flex-col items-end gap-1">
-                    <span className={`text-xs font-medium px-2.5 py-1 rounded ${
-                      assessment.risk_level === 'HIGH' ? 'bg-red-100 text-red-800' :
-                      assessment.risk_level === 'MODERATE' ? 'bg-yellow-100 text-yellow-800' :
-                      'bg-green-100 text-green-800'
-                    }`}>
-                      {assessment.risk_level}
-                    </span>
-                    <span className="text-xs bg-blue-100 text-blue-800 px-2.5 py-1 rounded">
-                      {Math.round(assessment.match_score * 100)}% match
-                    </span>
-                  </div>
-                </div>
-                {assessment.matched_preconditions && assessment.matched_preconditions.length > 0 && (
-                  <div className="mt-3">
-                    <p className="text-xs text-slate-500 mb-2">Matched Preconditions:</p>
-                    <div className="flex flex-wrap gap-1">
-                      {assessment.matched_preconditions.map((precond: string, i: number) => (
-                        <span key={i} className="bg-orange-100 text-orange-700 text-xs px-2 py-1 rounded">
-                          {precond}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {riskAssessment && riskAssessment.indicator_summary && (
-        <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-6 mb-8 border border-blue-200">
-          <h2 className="text-xl font-semibold text-slate-900 mb-4">Indicator Summary</h2>
-          <div className="grid md:grid-cols-4 gap-4">
-            <div className="bg-white rounded-lg p-4">
-              <p className="text-slate-600 text-sm">Total Indicators</p>
-              <p className="text-2xl font-bold text-blue-600">{riskAssessment.indicator_summary.total_indicators}</p>
-            </div>
-            <div className="bg-white rounded-lg p-4">
-              <p className="text-slate-600 text-sm">Critical</p>
-              <p className="text-2xl font-bold text-red-600">{riskAssessment.indicator_summary.critical_count}</p>
-            </div>
-            <div className="bg-white rounded-lg p-4">
-              <p className="text-slate-600 text-sm">Warning</p>
-              <p className="text-2xl font-bold text-orange-600">{riskAssessment.indicator_summary.warning_count}</p>
-            </div>
-            <div className="bg-white rounded-lg p-4">
-              <p className="text-slate-600 text-sm">Normal</p>
-              <p className="text-2xl font-bold text-green-600">{riskAssessment.indicator_summary.normal_count}</p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      <div className="mb-6">
-        <div className="flex flex-wrap gap-2">
-          {categories.map((category) => (
+      {/* Navigation Controls */}
+      <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-50">
+        <div className="bg-slate-900/90 backdrop-blur-lg rounded-full px-8 py-4 shadow-2xl border border-slate-700">
+          <div className="flex items-center gap-6">
             <button
-              key={category}
-              onClick={() => setSelectedCategory(category)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                selectedCategory === category
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-white text-slate-700 border border-slate-300 hover:bg-slate-50'
-              }`}
+              onClick={goToPrevSlide}
+              className="p-3 rounded-full bg-slate-800 hover:bg-slate-700 text-white transition-all hover:scale-110"
+              aria-label="Previous slide"
             >
-              {category === 'all' ? 'All Categories' : category.charAt(0).toUpperCase() + category.slice(1)}
+              <ChevronLeft className="w-6 h-6" />
             </button>
-          ))}
+            
+            <div className="flex items-center gap-4">
+              <span className="text-white font-bold text-lg">
+                {currentSlide + 1} / {totalSlides}
+              </span>
+              <div className="flex gap-2">
+                {Array.from({ length: totalSlides }).map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setCurrentSlide(idx)}
+                    className={`h-2 rounded-full transition-all ${
+                      idx === currentSlide 
+                        ? 'w-8 bg-blue-500' 
+                        : 'w-2 bg-slate-600 hover:bg-slate-500'
+                    }`}
+                    aria-label={`Go to slide ${idx + 1}`}
+                  />
+                ))}
+              </div>
+            </div>
+
+            <button
+              onClick={goToNextSlide}
+              className="p-3 rounded-full bg-slate-800 hover:bg-slate-700 text-white transition-all hover:scale-110"
+              aria-label="Next slide"
+            >
+              <ChevronRight className="w-6 h-6" />
+            </button>
+          </div>
         </div>
       </div>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredIndicators && filteredIndicators.map((indicator: WorldIndicator) => (
-          <IndicatorCard key={indicator.id} indicator={indicator} />
-        ))}
+      {/* Slide Counter (Top Right) */}
+      <div className="fixed top-8 right-8 z-40">
+        <div className="bg-slate-900/90 backdrop-blur-lg rounded-xl px-6 py-3 shadow-xl border border-slate-700">
+          <div className="text-white text-sm font-medium">
+            {currentSlide === 0 ? 'Risk Assessment' : categorizedIndicators[currentSlide - 1]?.category.toUpperCase()}
+          </div>
+        </div>
       </div>
+
+      {/* Expanded Indicator Modal */}
+      {selectedIndicator && (
+        <div 
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-8"
+          onClick={() => setSelectedIndicator(null)}
+        >
+          <div 
+            className="max-w-4xl w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <SlideIndicator indicator={selectedIndicator} isExpanded />
+            <button
+              onClick={() => setSelectedIndicator(null)}
+              className="mt-6 w-full py-4 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-semibold transition-colors"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
