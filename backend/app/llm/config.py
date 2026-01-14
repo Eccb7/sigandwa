@@ -9,7 +9,7 @@ class LLMConfig(BaseModel):
     """Configuration for local LLM"""
     model_config = ConfigDict(protected_namespaces=())
     
-    model_name: str = "phi-2"  # Smaller model for CPU (2.7B params, fast on CPU)
+    model_name: str = "lfm2-1.2b-rag"  # LiquidAI LFM2-1.2B-RAG model optimized for RAG
     model_path: str = "./models"
     max_tokens: int = 512
     temperature: float = 0.7
