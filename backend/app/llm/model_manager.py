@@ -23,11 +23,19 @@ class ModelManager:
         Download model from HuggingFace if not exists
         
         CPU-optimized models:
+        - LiquidAI/LFM2-1.2B-RAG-GGUF (1.2B, optimized for RAG tasks)
         - TheBloke/phi-2-GGUF (2.7B, excellent for CPU)
         - TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF (1.1B, very fast)
         - TheBloke/Mistral-7B-Instruct-v0.2-GGUF (7B, slower but better quality)
         """
-        model_filename = f"phi-2.{self.config.quantization}.gguf"
+        # Map model name to filename
+        filename_map = {
+            "lfm2-1.2b-rag": f"lfm2-1.2b-rag.{self.config.quantization}.gguf",
+            "phi-2": f"phi-2.{self.config.quantization}.gguf",
+            "tinyllama": f"tinyllama-1.1b-chat-v1.0.{self.config.quantization}.gguf",
+            "mistral-7b-instruct": f"mistral-7b-instruct-v0.2.{self.config.quantization}.gguf",
+        }
+        model_filename = filename_map.get(self.config.model_name, f"{self.config.model_name}.{self.config.quantization}.gguf")
         local_path = self.model_path / model_filename
         
         if local_path.exists() and not force:
@@ -35,16 +43,17 @@ class ModelManager:
             return str(local_path)
         
         print(f"📥 Downloading {self.config.model_name} (CPU-optimized)...")
-        print(f"   This may take a few minutes (model size: ~1.5GB)")
+        print(f"   This may take a few minutes (model size: ~1-2GB)")
         
         # Map model names to HuggingFace repos (CPU-friendly models)
         model_repos = {
+            "lfm2-1.2b-rag": "LiquidAI/LFM2-1.2B-RAG-GGUF",
             "phi-2": "TheBloke/phi-2-GGUF",
             "tinyllama": "TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF",
             "mistral-7b-instruct": "TheBloke/Mistral-7B-Instruct-v0.2-GGUF",
         }
         
-        repo_id = model_repos.get(self.config.model_name, "TheBloke/phi-2-GGUF")
+        repo_id = model_repos.get(self.config.model_name, "LiquidAI/LFM2-1.2B-RAG-GGUF")
         
         try:
             # Download from HuggingFace
@@ -109,7 +118,8 @@ class ModelManager:
     
     def _format_chat_prompt(self, messages: list[Dict[str, str]]) -> str:
         """Format chat messages into model-specific prompt format"""
-        # Phi-2 format (simple instruction format)
+        # LiquidAI LFM2 format (instruction-tuned for RAG)
+        # Falls back to simple instruction format for other models
         formatted = ""
         for msg in messages:
             role = msg["role"]
