@@ -30,7 +30,7 @@ class ModelManager:
         """
         # Map model name to filename
         filename_map = {
-            "lfm2-1.2b-rag": f"lfm2-1.2b-rag.{self.config.quantization}.gguf",
+            "lfm2-1.2b-rag": f"LFM2-1.2B-RAG-{self.config.quantization}.gguf",
             "phi-2": f"phi-2.{self.config.quantization}.gguf",
             "tinyllama": f"tinyllama-1.1b-chat-v1.0.{self.config.quantization}.gguf",
             "mistral-7b-instruct": f"mistral-7b-instruct-v0.2.{self.config.quantization}.gguf",
