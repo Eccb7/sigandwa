@@ -28,7 +28,7 @@ fi
 read -p "Stop databases (PostgreSQL, Neo4j)? (y/N) " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
-    docker-compose stop
+    docker compose stop
     echo "✓ Databases stopped"
 fi
 

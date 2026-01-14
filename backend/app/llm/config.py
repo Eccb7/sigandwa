@@ -32,6 +32,7 @@ class TrainingConfig(BaseModel):
     ussher_annals: str = "./docs/James-Usher-Annals-of-the-World.txt"
     daniel_gems: str = "./docs/daniel_gems.txt"
     revelation_gems: str = "./docs/revelation_gems.txt"
+    studies_daniel: str = "./docs/Studies-in-the-Book-of-Daniel.txt"
     
     # Database sources
     use_chronology_db: bool = True

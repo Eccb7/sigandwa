@@ -89,7 +89,7 @@ def _process_pdf_extracts(config: TrainingConfig) -> List[Dict]:
     examples = []
     
     # Process each PDF file
-    for pdf_file in [config.ussher_annals, config.daniel_gems, config.revelation_gems]:
+    for pdf_file in [config.ussher_annals, config.daniel_gems, config.revelation_gems, config.studies_daniel]:
         pdf_path = Path(pdf_file)
         if not pdf_path.exists():
             print(f"  ⚠️  Skipping {pdf_path.name} (not found)")

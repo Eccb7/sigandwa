@@ -63,7 +63,7 @@ cd ..
 # Start Docker containers
 echo ""
 echo "Starting database containers..."
-docker-compose up -d
+docker compose up -d
 echo "✓ Databases starting (PostgreSQL and Neo4j)"
 
 # Wait for databases

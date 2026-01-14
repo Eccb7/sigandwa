@@ -77,7 +77,7 @@ NEO4J_STATUS=$?
 if [ $PG_STATUS -ne 0 ] || [ $NEO4J_STATUS -ne 0 ]; then
     echo ""
     echo -e "${YELLOW}Starting databases with Docker Compose...${NC}"
-    docker-compose up -d
+    docker compose up -d
     sleep 5
     echo -e "${GREEN}✓${NC} Databases started"
 fi

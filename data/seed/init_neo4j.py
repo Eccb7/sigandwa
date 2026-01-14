@@ -3,6 +3,13 @@ Neo4j graph database initialization and schema setup.
 Defines nodes and relationships for empire succession, prophecy fulfillment, and pattern recapitulation.
 """
 
+import sys
+from pathlib import Path
+
+# Add backend to path
+backend_path = Path(__file__).parent.parent.parent / "backend"
+sys.path.insert(0, str(backend_path))
+
 from neo4j import GraphDatabase
 from app.config import settings
 
@@ -201,16 +208,22 @@ class Neo4jInitializer:
         This demonstrates where patterns manifested in history.
         """
         with self.driver.session() as session:
+            # Link Babylon to Pride pattern
             session.run(
                 """
                 MATCH (babylon:Empire {name: 'Babylon'})
                 MATCH (pride:Pattern {name: 'Pride Precedes Fall'})
                 MERGE (babylon)-[:EXEMPLIFIES {
                     strength: 10,
-                    example: 'Nebuchadnezzar\'s seven years of madness',
+                    example: "Nebuchadnezzar's seven years of madness",
                     biblical_ref: 'Daniel 4'
                 }]->(pride)
+                """
+            )
 
+            # Link Rome to Unity-Fragmentation pattern
+            session.run(
+                """
                 MATCH (rome:Empire {name: 'Rome'})
                 MATCH (unity_frag:Pattern {name: 'Political Unity Followed by Fragmentation'})
                 MERGE (rome)-[:EXEMPLIFIES {
@@ -218,7 +231,12 @@ class Neo4jInitializer:
                     example: 'Division into Eastern and Western empires, then further fragmentation',
                     year: 395
                 }]->(unity_frag)
+                """
+            )
 
+            # Link Persia to Exile-Restoration pattern
+            session.run(
+                """
                 MATCH (persia:Empire {name: 'Medo-Persia'})
                 MATCH (exile:Pattern {name: 'Exile and Restoration'})
                 MERGE (persia)-[:FACILITATES {
