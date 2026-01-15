@@ -4,30 +4,28 @@ services:
   postgres:
     image: postgres:15-alpine
     container_name: sigandwa_postgres
+    network_mode: "host"
     environment:
       POSTGRES_USER: sigandwa
       POSTGRES_PASSWORD: sigandwa_dev
       POSTGRES_DB: sigandwa
-    ports:
-      - "5434:5432"
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U sigandwa"]
+      test: ["CMD-SHELL", "pg_isready -U sigandwa -p 5434"]
       interval: 10s
       timeout: 5s
       retries: 5
+    command: -p 5434
 
   neo4j:
     image: neo4j:5.15-community
     container_name: sigandwa_neo4j
+    network_mode: "host"
     environment:
       NEO4J_AUTH: neo4j/sigandwa_dev
       NEO4J_PLUGINS: '["apoc"]'
       NEO4J_dbms_security_procedures_unrestricted: apoc.*
-    ports:
-      - "7474:7474"  # HTTP
-      - "7687:7687"  # Bolt
     volumes:
       - ./data/neo4j:/data
       - ./data/neo4j-logs:/logs
@@ -36,7 +34,3 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-
-networks:
-  default:
-    name: sigandwa_network
