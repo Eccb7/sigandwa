@@ -14,7 +14,7 @@ class Settings(BaseSettings):
 
     # Database - PostgreSQL
     POSTGRES_HOST: str = "localhost"
-    POSTGRES_PORT: int = 5432
+    POSTGRES_PORT: int = 5434
     POSTGRES_USER: str = "sigandwa"
     POSTGRES_PASSWORD: str = "sigandwa_dev"
     POSTGRES_DB: str = "sigandwa"
