@@ -100,20 +100,42 @@ class ModelManager:
         if not self.model:
             self.load_model()
         
-        response = self.model(
-            prompt,
-            max_tokens=max_tokens or self.config.max_tokens,
-            temperature=temperature or self.config.temperature,
-            stop=stop or ["</s>", "Human:", "User:"],
-            echo=False
-        )
-        
-        return response["choices"][0]["text"].strip()
+        try:
+            response = self.model(
+                prompt,
+                max_tokens=max_tokens or self.config.max_tokens,
+                temperature=temperature or self.config.temperature,
+                stop=stop or ["</s>", "Human:", "User:"],
+                echo=False
+            )
+            return response["choices"][0]["text"].strip()
+        except Exception as e:
+            # If decode fails, reset the model and try again with shorter context
+            print(f"Generation error: {e}. Resetting model...")
+            self.model.reset()
+            # Try again with much shorter prompt
+            short_prompt = prompt[-1500:] if len(prompt) > 1500 else prompt
+            response = self.model(
+                short_prompt,
+                max_tokens=256,  # Reduce tokens
+                temperature=temperature or self.config.temperature,
+                stop=stop or ["</s>", "Human:", "User:"],
+                echo=False
+            )
+            return response["choices"][0]["text"].strip()
     
     def chat(self, messages: list[Dict[str, str]]) -> str:
         """Chat interface with conversation history"""
         # Format messages into prompt
         prompt = self._format_chat_prompt(messages)
+        
+        # Reset model context for each new conversation to avoid decode errors
+        if self.model:
+            try:
+                self.model.reset()
+            except:
+                pass  # Some models may not support reset
+                
         return self.generate(prompt)
     
     def _format_chat_prompt(self, messages: list[Dict[str, str]]) -> str:
