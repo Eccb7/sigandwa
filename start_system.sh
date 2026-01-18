@@ -126,7 +126,8 @@ else
     mkdir -p logs
     
     # Start backend with correct PYTHONPATH
-    nohup env PYTHONPATH=$(pwd)/backend python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 > logs/backend.log 2>&1 &
+    export PYTHONPATH="$(pwd)/backend"
+    nohup python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 > logs/backend.log 2>&1 &
     BACKEND_PID=$!
     echo $BACKEND_PID > logs/backend.pid
     
